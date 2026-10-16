@@ -7,14 +7,14 @@ namespace PharmacyStockExpiryMonitor.Api.Authorization
     {
         public static async Task SeedAsync(
             UserManager<ApplicationUser> userManager,
-            RoleManager<IdentityRole> roleManager)
+            RoleManager<IdentityRole<int>> roleManager)
         {
             // Create Admin role
             if (!await roleManager.RoleExistsAsync("Admin"))
             {
                 var adminRoleResult =
                     await roleManager.CreateAsync(
-                        new IdentityRole("Admin"));
+                        new IdentityRole<int>("Admin"));
 
                 if (!adminRoleResult.Succeeded)
                 {
@@ -33,7 +33,7 @@ namespace PharmacyStockExpiryMonitor.Api.Authorization
             {
                 var storeManagerResult =
                     await roleManager.CreateAsync(
-                        new IdentityRole("StoreManager"));
+                        new IdentityRole<int>("StoreManager"));
 
                 if (!storeManagerResult.Succeeded)
                 {
@@ -52,7 +52,7 @@ namespace PharmacyStockExpiryMonitor.Api.Authorization
             {
                 var pharmacistResult =
                     await roleManager.CreateAsync(
-                        new IdentityRole("Pharmacist"));
+                        new IdentityRole<int>("Pharmacist"));
 
                 if (!pharmacistResult.Succeeded)
                 {
@@ -69,6 +69,9 @@ namespace PharmacyStockExpiryMonitor.Api.Authorization
             // Helper local function to seed users
             async Task EnsureUserAsync(string email, string password, string fullName, string role)
             {
+                var roleObj = await roleManager.FindByNameAsync(role);
+                var roleId = roleObj?.Id;
+
                 var user = await userManager.FindByEmailAsync(email);
                 if (user == null)
                 {
@@ -80,6 +83,7 @@ namespace PharmacyStockExpiryMonitor.Api.Authorization
                         EmailConfirmed = true,
                         IsActive = true,
                         IsDeleted = false,
+                        RoleId = roleId,
                         CreatedAt = DateTime.UtcNow
                     };
 
@@ -89,6 +93,11 @@ namespace PharmacyStockExpiryMonitor.Api.Authorization
                         var errors = string.Join(", ", userResult.Errors.Select(x => x.Description));
                         throw new InvalidOperationException($"{role} user creation failed: {errors}");
                     }
+                }
+                else if (user.RoleId == null && roleId.HasValue)
+                {
+                    user.RoleId = roleId;
+                    await userManager.UpdateAsync(user);
                 }
 
                 if (!await userManager.IsInRoleAsync(user, role))

@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using PharmacyStockExpiryMonitor.Api.DTOs.Auth;
@@ -13,13 +13,16 @@ namespace PharmacyStockExpiryMonitor.Api.Services
     public class AuthService : IAuthService
     {
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly RoleManager<IdentityRole<int>> _roleManager;
         private readonly IConfiguration _configuration;
 
         public AuthService(
             UserManager<ApplicationUser> userManager,
+            RoleManager<IdentityRole<int>> roleManager,
             IConfiguration configuration)
         {
             _userManager = userManager;
+            _roleManager = roleManager;
             _configuration = configuration;
         }
 
@@ -43,19 +46,36 @@ namespace PharmacyStockExpiryMonitor.Api.Services
             if (!passwordValid)
                 return null;
 
-            var token = await GenerateTokenAsync(user);
+            int roleId = user.RoleId ?? 1;
+            if (user.RoleId == null)
+            {
+                var rolesList = await _userManager.GetRolesAsync(user);
+                var primaryRole = rolesList.FirstOrDefault();
+                if (primaryRole != null)
+                {
+                    var roleEntity = await _roleManager.FindByNameAsync(primaryRole);
+                    if (roleEntity != null)
+                    {
+                        roleId = roleEntity.Id;
+                    }
+                }
+            }
+
+            var token = await GenerateTokenAsync(user, roleId);
 
             return new LoginResponseDto
             {
                 Token = token,
                 UserId = user.Id,
                 Email = user.Email!,
-                FullName = user.FullName
+                FullName = user.FullName,
+                RoleId = roleId
             };
         }
 
         private async Task<string> GenerateTokenAsync(
-            ApplicationUser user)
+            ApplicationUser user,
+            int roleId)
         {
             var jwtSettings =
                 _configuration.GetSection("JwtSettings");
@@ -75,7 +95,7 @@ namespace PharmacyStockExpiryMonitor.Api.Services
             {
                 new Claim(
                     ClaimTypes.NameIdentifier,
-                    user.Id),
+                    user.Id.ToString()),
 
                 new Claim(
                     ClaimTypes.Email,
@@ -83,7 +103,11 @@ namespace PharmacyStockExpiryMonitor.Api.Services
 
                 new Claim(
                     ClaimTypes.Name,
-                    user.FullName ?? string.Empty)
+                    user.FullName ?? string.Empty),
+
+                new Claim(
+                    "roleId",
+                    roleId.ToString())
             };
 
             // Add user roles to JWT

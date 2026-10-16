@@ -1,66 +1,56 @@
-import { useNavigate } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
+import { useState, useEffect } from "react";
+import { dashboardApi } from "../api/client";
+import StockBarChart from "../components/dashboard/StockBarChart";
+import DashboardStatsGrid from "../components/dashboard/DashboardStatsGrid";
+import PharmacySummaryCard from "../components/dashboard/PharmacySummaryCard";
+import "../styles/dashboard.css";
 
 export default function DashboardPage() {
-  const { user, role, logout } = useAuth();
-  const navigate = useNavigate();
+  const [stats, setStats] = useState({});
+  const [loading, setLoading] = useState(true);
 
-  const rawRole = user?.role || role || "Pharmacist";
-  const formattedRole =
-    rawRole === "StoreManager"
-      ? "Store Manager"
-      : rawRole.replace(/([A-Z])/g, " $1").trim() || "Pharmacist";
-
-  const handleLogout = () => {
-    logout();
-    navigate("/login");
+  // Load summary statistics from the backend
+  const loadDashboard = () => {
+    setLoading(true);
+    dashboardApi
+      .getSummary()
+      .then((res) => setStats(res.data || {}))
+      .catch((err) => console.error("Error loading dashboard:", err))
+      .finally(() => setLoading(false));
   };
 
-  return (
-    <div
-      style={{
-        minHeight: "100vh",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-        backgroundColor: "#f8fafc",
-        fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
-        padding: "24px",
-        textAlign: "center"
-      }}
-    >
-      <h1
-        style={{
-          fontSize: "40px",
-          fontWeight: "700",
-          color: "#0f172a",
-          margin: "0 0 24px 0"
-        }}
-      >
-        Welcome, {formattedRole}!
-      </h1>
+  useEffect(() => {
+    loadDashboard();
+  }, []);
 
-      <button
-        type="button"
-        onClick={handleLogout}
-        style={{
-          padding: "10px 28px",
-          fontSize: "15px",
-          fontWeight: "600",
-          color: "#ffffff",
-          backgroundColor: "#dc2626",
-          border: "none",
-          borderRadius: "6px",
-          cursor: "pointer",
-          transition: "background-color 0.15s ease",
-          boxShadow: "0 2px 4px rgba(220, 38, 38, 0.2)"
-        }}
-        onMouseOver={(e) => (e.currentTarget.style.backgroundColor = "#b91c1c")}
-        onMouseOut={(e) => (e.currentTarget.style.backgroundColor = "#dc2626")}
-      >
-        Logout
-      </button>
+  return (
+    <div className="dashboard-page-container">
+      {/* Header */}
+      <div className="dashboard-header">
+        <div>
+          <h1 className="dashboard-title">Pharmacy Dashboard</h1>
+          <p className="dashboard-subtitle">Overview of medicines, stock, and yearly performance</p>
+        </div>
+        <button className="btn btn-primary dashboard-refresh-btn" onClick={loadDashboard}>
+          {loading ? "Loading..." : "Refresh"}
+        </button>
+      </div>
+
+      {/* 6 KPI Stat Cards */}
+      <DashboardStatsGrid stats={stats} loading={loading} />
+
+      {/* Main Charts & Quick Summary Panel */}
+      <div className="dashboard-visuals-row">
+        {/* Yearly Bar Chart */}
+        <div className="dashboard-chart-column">
+          <StockBarChart />
+        </div>
+
+        {/* Quick Summary Panel */}
+        <div className="dashboard-summary-panel">
+          <PharmacySummaryCard stats={stats} />
+        </div>
+      </div>
     </div>
   );
 }

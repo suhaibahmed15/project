@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity;
 using PharmacyStockExpiryMonitor.Api.DTOs.Role;
 using PharmacyStockExpiryMonitor.Api.Services.Interfaces;
 
@@ -6,10 +6,10 @@ namespace PharmacyStockExpiryMonitor.Api.Services
 {
     public class RoleService : IRoleService
     {
-        private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly RoleManager<IdentityRole<int>> _roleManager;
 
         public RoleService(
-            RoleManager<IdentityRole> roleManager)
+            RoleManager<IdentityRole<int>> roleManager)
         {
             _roleManager = roleManager;
         }
@@ -38,7 +38,7 @@ namespace PharmacyStockExpiryMonitor.Api.Services
                     "Role already exists.");
             }
 
-            var role = new IdentityRole(roleName);
+            var role = new IdentityRole<int>(roleName);
 
             var result =
                 await _roleManager.CreateAsync(role);
@@ -59,10 +59,10 @@ namespace PharmacyStockExpiryMonitor.Api.Services
             };
         }
 
-        public async Task<bool> DeleteAsync(string roleId)
+        public async Task<bool> DeleteAsync(int roleId)
         {
             var role =
-                await _roleManager.FindByIdAsync(roleId);
+                await _roleManager.FindByIdAsync(roleId.ToString());
 
             if (role == null)
                 return false;

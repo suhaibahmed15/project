@@ -1,4 +1,4 @@
-﻿using PharmacyStockExpiryMonitor.Api.DTOs.Role;
+using PharmacyStockExpiryMonitor.Api.DTOs.Role;
 
 namespace PharmacyStockExpiryMonitor.Api.Services.Interfaces
 {
@@ -9,6 +9,6 @@ namespace PharmacyStockExpiryMonitor.Api.Services.Interfaces
         Task<RoleDto> CreateAsync(
             CreateRoleDto dto);
 
-        Task<bool> DeleteAsync(string roleId);
+        Task<bool> DeleteAsync(int roleId);
     }
 }

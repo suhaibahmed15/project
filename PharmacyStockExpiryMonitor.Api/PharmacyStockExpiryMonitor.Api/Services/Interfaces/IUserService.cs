@@ -1,4 +1,4 @@
-﻿using PharmacyStockExpiryMonitor.Api.DTOs.User;
+using PharmacyStockExpiryMonitor.Api.DTOs.User;
 
 namespace PharmacyStockExpiryMonitor.Api.Services.Interfaces
 {
@@ -6,15 +6,15 @@ namespace PharmacyStockExpiryMonitor.Api.Services.Interfaces
     {
         Task<List<UserDto>> GetAllAsync();
 
-        Task<UserDto?> GetByIdAsync(string id);
+        Task<UserDto?> GetByIdAsync(int id);
 
         Task<UserDto> CreateAsync(
             CreateUserDto dto);
 
         Task<bool> AssignRoleAsync(
-            string userId,
+            int userId,
             AssignRoleDto dto);
 
-        Task<bool> DeleteAsync(string id);
+        Task<bool> DeleteAsync(int id);
     }
 }

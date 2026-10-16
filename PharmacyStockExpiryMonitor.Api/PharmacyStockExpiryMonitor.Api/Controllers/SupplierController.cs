@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PharmacyStockExpiryMonitor.Api.DTOs.Supplier;
 using PharmacyStockExpiryMonitor.Api.Services.Interfaces;
@@ -139,6 +139,7 @@ namespace PharmacyStockExpiryMonitor.Api.Controllers
 
         // DELETE: api/Supplier/5
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int id)
         {
             var result =

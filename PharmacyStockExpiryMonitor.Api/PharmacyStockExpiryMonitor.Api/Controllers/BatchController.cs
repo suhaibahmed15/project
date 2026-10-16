@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PharmacyStockExpiryMonitor.Api.DTOs.Batch;
 using PharmacyStockExpiryMonitor.Api.Services.Interfaces;
@@ -82,6 +82,7 @@ namespace PharmacyStockExpiryMonitor.Api.Controllers
         // DELETE: api/Batch/5
         // Soft-deletes a batch.
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int id)
         {
             var result = await _batchService.DeleteAsync(id);

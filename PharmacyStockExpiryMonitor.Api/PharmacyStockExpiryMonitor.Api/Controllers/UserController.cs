@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PharmacyStockExpiryMonitor.Api.DTOs.User;
 using PharmacyStockExpiryMonitor.Api.Services.Interfaces;
@@ -31,7 +31,7 @@ namespace PharmacyStockExpiryMonitor.Api.Controllers
         // GET: api/User/{id}
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(
-            string id)
+            int id)
         {
             var user =
                 await _userService.GetByIdAsync(id);
@@ -71,7 +71,7 @@ namespace PharmacyStockExpiryMonitor.Api.Controllers
         // POST: api/User/{id}/role
         [HttpPost("{id}/role")]
         public async Task<IActionResult> AssignRole(
-            string id,
+            int id,
             AssignRoleDto dto)
         {
             try
@@ -106,7 +106,7 @@ namespace PharmacyStockExpiryMonitor.Api.Controllers
         // DELETE: api/User/{id}
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(
-            string id)
+            int id)
         {
             try
             {

@@ -1,4 +1,4 @@
-﻿using System.Security.Claims;
+using System.Security.Claims;
 using System.Text.Json;
 using Microsoft.AspNetCore.Http;
 using PharmacyStockExpiryMonitor.Api.Data;
@@ -31,8 +31,11 @@ namespace PharmacyStockExpiryMonitor.Api.Services
 
             var auditLog = new AuditLog
             {
-                UserId = httpContext?.User?
-                    .FindFirstValue(ClaimTypes.NameIdentifier),
+                UserId = int.TryParse(
+                    httpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier),
+                    out var parsedUserId)
+                        ? parsedUserId
+                        : null,
 
                 Action = action,
                 EntityName = entityName,

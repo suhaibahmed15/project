@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PharmacyStockExpiryMonitor.Api.DTOs.Role;
 using PharmacyStockExpiryMonitor.Api.Services.Interfaces;
@@ -52,7 +52,7 @@ namespace PharmacyStockExpiryMonitor.Api.Controllers
         // DELETE: api/Role/{roleId}
         [HttpDelete("{roleId}")]
         public async Task<IActionResult> Delete(
-            string roleId)
+            int roleId)
         {
             try
             {

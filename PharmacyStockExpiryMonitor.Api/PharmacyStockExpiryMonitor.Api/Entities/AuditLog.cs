@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 
 namespace PharmacyStockExpiryMonitor.Api.Entities;
 
@@ -6,8 +6,7 @@ public class AuditLog
 {
     public int Id { get; set; }
 
-    [StringLength(450)]
-    public string? UserId { get; set; }
+    public int? UserId { get; set; }
 
     [Required]
     [StringLength(100)]

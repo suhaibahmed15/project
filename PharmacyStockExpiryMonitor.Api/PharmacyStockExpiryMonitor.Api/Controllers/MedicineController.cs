@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PharmacyStockExpiryMonitor.Api.DTOs.Medicine;
 using PharmacyStockExpiryMonitor.Api.Services.Interfaces;
@@ -152,6 +152,7 @@ namespace PharmacyStockExpiryMonitor.Api.Controllers
         // DELETE: api/Medicine/5
         // Soft-deletes a medicine.
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int id)
         {
             var result = await _medicineService.DeleteAsync(id);

@@ -1,9 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Identity;
 
 namespace PharmacyStockExpiryMonitor.Api.Entities;
 
-public class ApplicationUser : IdentityUser
+public class ApplicationUser : IdentityUser<int>
 {
     [Required]
     [StringLength(150)]
@@ -16,6 +16,8 @@ public class ApplicationUser : IdentityUser
     public DateTime? UpdatedAt { get; set; }
 
     public bool IsDeleted { get; set; } = false;
+
+    public int? RoleId { get; set; }
 
     public ICollection<AuditLog> AuditLogs { get; set; }
         = new List<AuditLog>();

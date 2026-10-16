@@ -1,36 +1,62 @@
-import { useState } from "react";
-import { Outlet, useLocation, useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Outlet, useNavigate, useLocation } from "react-router-dom";
 import Sidebar from "./Sidebar";
 import Topbar from "./Topbar";
 import { useAuth } from "../context/AuthContext";
+import "../styles/layout.css";
 
 export default function Layout() {
-  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [sidebarOpen, setSidebarOpen] = useState(() => {
+    if (typeof window !== "undefined") {
+      return window.innerWidth >= 1024;
+    }
+    return true;
+  });
+
   const { user, role, logout } = useAuth();
-  const location = useLocation();
   const navigate = useNavigate();
+  const location = useLocation();
+
+  // Automatically close sidebar on route navigation on smaller screens
+  useEffect(() => {
+    if (window.innerWidth < 1024) {
+      setSidebarOpen(false);
+    }
+  }, [location.pathname]);
+
+  // Handle window resizing
+  useEffect(() => {
+    let prevWidth = window.innerWidth;
+    const handleResize = () => {
+      const currentWidth = window.innerWidth;
+      if (prevWidth < 1024 && currentWidth >= 1024) {
+        setSidebarOpen(true);
+      } else if (prevWidth >= 1024 && currentWidth < 1024) {
+        setSidebarOpen(false);
+      }
+      prevWidth = currentWidth;
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   const handleLogout = () => {
     logout();
     navigate("/login");
   };
 
-  const getPageTitle = (pathname) => {
-    if (pathname === "/") return "Dashboard Overview";
-    if (pathname.startsWith("/medicines")) return "Medicine Inventory";
-    if (pathname.startsWith("/batches")) return "Batches & Expiry Dates";
-    if (pathname.startsWith("/transactions")) return "Stock Ledger";
-    if (pathname.startsWith("/purchases")) return "Purchase Orders";
-    if (pathname.startsWith("/alerts")) return "Stock & Expiry Alerts";
-    if (pathname.startsWith("/intelligence")) return "AI Stock Intelligence";
-    if (pathname.startsWith("/categories")) return "Medicine Categories";
-    if (pathname.startsWith("/suppliers")) return "Suppliers Directory";
-    if (pathname.startsWith("/users")) return "User Management";
-    return "Pharmacy Management";
-  };
-
   return (
     <div className={`app-shell ${sidebarOpen ? "sidebar-expanded" : "sidebar-collapsed"}`}>
+      {/* Mobile Backdrop Overlay */}
+      {sidebarOpen && (
+        <div
+          className="sidebar-backdrop"
+          onClick={() => setSidebarOpen(false)}
+          aria-hidden="true"
+        />
+      )}
+
       <Sidebar
         isOpen={sidebarOpen}
         onClose={() => setSidebarOpen(false)}
@@ -39,8 +65,8 @@ export default function Layout() {
 
       <div className="main-area">
         <Topbar
-          activeTitle={getPageTitle(location.pathname)}
           user={user}
+          role={role}
           onLogout={handleLogout}
           onToggleSidebar={() => setSidebarOpen(!sidebarOpen)}
           sidebarOpen={sidebarOpen}
@@ -49,10 +75,6 @@ export default function Layout() {
         <main className="page-content">
           <Outlet />
         </main>
-
-        <footer className="page-footer">
-          &copy; {new Date().getFullYear()} Pharmacy Stock &amp; Expiry Monitor.
-        </footer>
       </div>
     </div>
   );

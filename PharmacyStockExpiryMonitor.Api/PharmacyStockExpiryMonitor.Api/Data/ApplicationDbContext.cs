@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using PharmacyStockExpiryMonitor.Api.Entities;
@@ -6,7 +7,7 @@ using System.Security.Claims;
 
 namespace PharmacyStockExpiryMonitor.Api.Data
 {
-    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser, IdentityRole<int>, int>
     {
         private readonly IHttpContextAccessor? _httpContextAccessor;
 
@@ -41,6 +42,21 @@ namespace PharmacyStockExpiryMonitor.Api.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+
+
+            // =========================
+            // ApplicationUser (Identity)
+            // =========================
+            modelBuilder.Entity<ApplicationUser>(b =>
+            {
+                b.Ignore(u => u.LockoutEnabled);
+                b.Ignore(u => u.LockoutEnd);
+                b.Ignore(u => u.TwoFactorEnabled);
+                b.Ignore(u => u.PhoneNumberConfirmed);
+                b.Ignore(u => u.EmailConfirmed);
+                b.Ignore(u => u.AccessFailedCount);
+            });
 
             // =========================
             // Category
@@ -367,10 +383,6 @@ namespace PharmacyStockExpiryMonitor.Api.Data
 
             modelBuilder.Entity<AuditLog>()
                 .HasIndex(x => x.UserId);
-
-            modelBuilder.Entity<AuditLog>()
-                .Property(x => x.UserId)
-                .HasMaxLength(450);
 
             modelBuilder.Entity<AuditLog>()
                 .Property(x => x.Action)

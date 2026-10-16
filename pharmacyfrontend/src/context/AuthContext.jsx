@@ -1,8 +1,7 @@
-
 import { createContext, useContext, useState } from "react";
 import { authApi } from "../api/client";
 
-//This function reads the information stored inside a JWT token also you can say Simple helper to decode JWT payload without external libraries
+// This function reads the information stored inside a JWT token
 function parseJwt(token) {
   try {
     if (!token) return null;
@@ -28,7 +27,17 @@ export function AuthProvider({ children }) {
   const [user, setUser] = useState(() => {
     try {
       const stored = localStorage.getItem("user");
-      return stored ? JSON.parse(stored) : null;
+      if (!stored) return null;
+      const parsed = JSON.parse(stored);
+      // Auto-migrate legacy stored user with "role" to "roleId"
+      if (parsed && parsed.roleId === undefined) {
+        const rName = parsed.role || "Admin";
+        parsed.roleId =
+          rName === "Admin" ? 1 : rName === "StoreManager" ? 2 : rName === "Pharmacist" ? 3 : 1;
+        delete parsed.role;
+        localStorage.setItem("user", JSON.stringify(parsed));
+      }
+      return parsed;
     } catch {
       return null;
     }
@@ -44,17 +53,26 @@ export function AuthProvider({ children }) {
     }
 
     const decoded = parseJwt(newToken);
-    const roleClaim =
+    const rawRoleClaim =
       decoded?.["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] ||
       decoded?.role ||
       data?.role ||
-      "User";
+      "Admin";
+    const roleName = Array.isArray(rawRoleClaim) ? rawRoleClaim[0] : rawRoleClaim;
+
+    let roleId = data?.roleId ?? (decoded?.roleId ? Number(decoded.roleId) : null);
+    if (roleId === null || roleId === undefined) {
+      if (String(roleName).toLowerCase() === "admin") roleId = 1;
+      else if (String(roleName).toLowerCase() === "storemanager") roleId = 2;
+      else if (String(roleName).toLowerCase() === "pharmacist") roleId = 3;
+      else roleId = 1;
+    }
 
     const userObj = {
       userId: data?.userId || decoded?.nameid || decoded?.sub,
       email: data?.email || credentials.email,
       fullName: data?.fullName || decoded?.unique_name || credentials.email.split("@")[0],
-      role: Array.isArray(roleClaim) ? roleClaim[0] : roleClaim
+      roleId: Number(roleId)
     };
 
     localStorage.setItem("token", newToken);
@@ -72,17 +90,25 @@ export function AuthProvider({ children }) {
     setUser(null);
   };
 
-  const role = user?.role || "";
+  const userRoleId =
+    user?.roleId ??
+    (user?.role === "Admin" ? 1 : user?.role === "StoreManager" ? 2 : user?.role === "Pharmacist" ? 3 : 1);
+
+  const roleName =
+    userRoleId === 1 ? "Admin" : userRoleId === 2 ? "StoreManager" : userRoleId === 3 ? "Pharmacist" : "User";
+
   const isAuthenticated = Boolean(token);
 
   const value = {
     token,
     user,
-    role,
+    roleId: userRoleId,
+    role: userRoleId,
+    roleName,
     isAuthenticated,
-    isAdmin: role.toLowerCase() === "admin",
-    isStoreManager: role.toLowerCase() === "storemanager",
-    isPharmacist: role.toLowerCase() === "pharmacist",
+    isAdmin: userRoleId === 1,
+    isStoreManager: userRoleId === 2,
+    isPharmacist: userRoleId === 3,
     login,
     logout
   };
@@ -90,7 +116,7 @@ export function AuthProvider({ children }) {
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
 
-// Custom hook exported directly from context file (Standard React practice)
+// Custom hook exported directly from context file
 export function useAuth() {
   const context = useContext(AuthContext);
   if (!context) {
