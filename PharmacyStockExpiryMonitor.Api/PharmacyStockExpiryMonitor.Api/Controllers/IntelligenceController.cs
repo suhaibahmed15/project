@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PharmacyStockExpiryMonitor.Api.DTOs.Intelligence;
 using PharmacyStockExpiryMonitor.Api.DTOs.Prediction;
@@ -8,7 +8,7 @@ namespace PharmacyStockExpiryMonitor.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    [Authorize(Roles = "Admin,StoreManager")]
     public class IntelligenceController : ControllerBase
     {
         private readonly IIntelligenceService _service;

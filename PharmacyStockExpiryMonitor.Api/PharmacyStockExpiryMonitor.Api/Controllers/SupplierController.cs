@@ -118,7 +118,7 @@ namespace PharmacyStockExpiryMonitor.Api.Controllers
                         dto,
                         username);
 
-                if (supplier == null)
+                if (!supplier)
                 {
                     return NotFound(new
                     {

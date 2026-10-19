@@ -1,0 +1,181 @@
+import { useState, useMemo } from "react";
+import { getMedicineLabel, getBadgeClass, getScoreFillClass } from "./intelligenceUtils";
+
+export default function IntelligenceTable({
+  predictions = [],
+  medicines = [],
+  loading = false,
+  onReevaluate
+}) {
+  const [searchQuery, setSearchQuery] = useState("");
+  const [riskFilter, setRiskFilter] = useState("all");
+
+  const filteredPredictions = useMemo(() => {
+    return predictions.filter((item) => {
+      if (riskFilter !== "all") {
+        const type = (item.predictionType || "").toLowerCase();
+        if (riskFilter === "high" && !type.includes("high") && !type.includes("stock-out")) return false;
+        if (riskFilter === "medium" && !type.includes("medium")) return false;
+        if (riskFilter === "low" && !type.includes("low")) return false;
+      }
+
+      if (searchQuery.trim()) {
+        const q = searchQuery.toLowerCase();
+        const medName = getMedicineLabel(medicines, item.medicineId).toLowerCase();
+        const explanation = (item.explanation || "").toLowerCase();
+        const type = (item.predictionType || "").toLowerCase();
+        return medName.includes(q) || explanation.includes(q) || type.includes(q);
+      }
+
+      return true;
+    });
+  }, [predictions, riskFilter, searchQuery, medicines]);
+
+  return (
+    <div className="intelligence-history-card">
+      <div className="history-toolbar">
+        <div className="filter-chips-row">
+          <button
+            type="button"
+            className={`filter-chip-btn ${riskFilter === "all" ? "active" : ""}`}
+            onClick={() => setRiskFilter("all")}
+          >
+            All ({predictions.length})
+          </button>
+          <button
+            type="button"
+            className={`filter-chip-btn ${riskFilter === "high" ? "active" : ""}`}
+            onClick={() => setRiskFilter("high")}
+          >
+            High Risk ({predictions.filter((p) => p.predictionScore >= 0.7).length})
+          </button>
+          <button
+            type="button"
+            className={`filter-chip-btn ${riskFilter === "medium" ? "active" : ""}`}
+            onClick={() => setRiskFilter("medium")}
+          >
+            Medium Risk ({predictions.filter((p) => p.predictionScore >= 0.4 && p.predictionScore < 0.7).length})
+          </button>
+          <button
+            type="button"
+            className={`filter-chip-btn ${riskFilter === "low" ? "active" : ""}`}
+            onClick={() => setRiskFilter("low")}
+          >
+            Low Risk ({predictions.filter((p) => p.predictionScore < 0.4).length})
+          </button>
+        </div>
+
+        <input
+          type="text"
+          className="history-search-input"
+          placeholder="Search by medicine or insight..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+        />
+      </div>
+
+      {loading ? (
+        <div className="intelligence-empty-state">
+          <p>Loading AI Intelligence models...</p>
+        </div>
+      ) : filteredPredictions.length === 0 ? (
+        <div className="intelligence-empty-state">
+          <p>
+            {searchQuery || riskFilter !== "all"
+              ? "No evaluation results match your search filters."
+              : "No intelligence evaluations have been generated yet."}
+          </p>
+        </div>
+      ) : (
+        <div className="intelligence-table-wrapper">
+          <table className="intelligence-table">
+            <thead>
+              <tr>
+                <th>Medicine</th>
+                <th>Scope</th>
+                <th>Burn Rate</th>
+                <th>Days Left</th>
+                <th>Risk Score</th>
+                <th>Status</th>
+                <th>AI Insight</th>
+                <th>Evaluated</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filteredPredictions.map((pred) => (
+                <tr key={pred.id}>
+                  <td>
+                    <strong style={{ color: "#0f172a" }}>
+                      {getMedicineLabel(medicines, pred.medicineId)}
+                    </strong>
+                  </td>
+                  <td>
+                    <span className="badge badge-secondary" style={{ fontSize: "11px" }}>
+                      {pred.batchId ? `Batch #${pred.batchId}` : "Entire Stock"}
+                    </span>
+                  </td>
+                  <td>
+                    <strong>{pred.averageDailyConsumption}</strong>{" "}
+                    <span style={{ fontSize: "11px", color: "#64748b" }}>u/d</span>
+                  </td>
+                  <td>
+                    <span
+                      style={{
+                        fontWeight: "700",
+                        color:
+                          pred.estimatedDaysRemaining <= 3
+                            ? "#dc2626"
+                            : pred.estimatedDaysRemaining <= 7
+                            ? "#d97706"
+                            : "#16a34a"
+                      }}
+                    >
+                      {pred.estimatedDaysRemaining > 0 ? `${pred.estimatedDaysRemaining}d` : "Depleted"}
+                    </span>
+                  </td>
+                  <td>
+                    <div className="score-meter">
+                      <div className="score-bar-bg">
+                        <div
+                          className={`score-bar-fill ${getScoreFillClass(pred.predictionScore)}`}
+                          style={{ width: `${Math.min(pred.predictionScore * 100, 100)}%` }}
+                        />
+                      </div>
+                      <span style={{ fontSize: "11px", fontWeight: "700" }}>
+                        {(pred.predictionScore * 100).toFixed(0)}%
+                      </span>
+                    </div>
+                  </td>
+                  <td>
+                    <span className={`prediction-type-badge ${getBadgeClass(pred.predictionType, pred.predictionScore)}`}>
+                      {pred.predictionType || "Evaluated"}
+                    </span>
+                  </td>
+                  <td style={{ maxWidth: "250px" }}>
+                    <span style={{ fontSize: "12px", color: "#475569", lineHeight: "1.4" }}>
+                      {pred.explanation}
+                    </span>
+                  </td>
+                  <td style={{ whiteSpace: "nowrap", color: "#64748b", fontSize: "12px" }}>
+                    {new Date(pred.predictedAt).toLocaleDateString()}
+                  </td>
+                  <td>
+                    <button
+                      type="button"
+                      className="btn-reevaluate"
+                      title="Re-run analysis for this medicine"
+                      onClick={() => onReevaluate?.(pred)}
+                    >
+                      Re-evaluate
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+    </div>
+  );
+}

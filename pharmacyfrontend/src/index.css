@@ -9,6 +9,8 @@
 @import "./styles/dashboard.css";
 @import "./styles/medicines.css";
 @import "./styles/users.css";
+@import "./styles/batches.css";
+@import "./styles/intelligence.css";
 @import "./styles/statusPages.css";
 
 /* Design Tokens & Root Variables */

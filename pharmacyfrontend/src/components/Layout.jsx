@@ -59,8 +59,10 @@ export default function Layout() {
 
       <Sidebar
         isOpen={sidebarOpen}
+        onToggle={() => setSidebarOpen(!sidebarOpen)}
         onClose={() => setSidebarOpen(false)}
         userRole={role}
+        user={user}
       />
 
       <div className="main-area">
