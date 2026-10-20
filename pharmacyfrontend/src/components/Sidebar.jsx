@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { NavLink } from "react-router-dom";
 import { ROLES } from "../utils/constants";
 import "../styles/layout.css";
@@ -62,7 +61,6 @@ const NAV_ITEMS = [
   {
     label: "Alerts",
     path: "/alerts",
-    badge: 2,
     icon: (
       <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
@@ -72,7 +70,6 @@ const NAV_ITEMS = [
   {
     label: "AI Intelligence",
     path: "/intelligence",
-    managerOrAdminOnly: true,
     icon: (
       <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3L12 3z" />
@@ -122,8 +119,6 @@ export default function Sidebar({
   onClose,
   user
 }) {
-  const [searchTerm, setSearchTerm] = useState("");
-
   const isAdmin =
     userRole === 1 ||
     userRole === "1" ||
@@ -147,37 +142,14 @@ export default function Sidebar({
   const filteredItems = NAV_ITEMS.filter((item) => {
     if (item.adminOnly && !isAdmin) return false;
     if (item.managerOrAdminOnly && !isManagerOrAdmin) return false;
-    if (!searchTerm.trim()) return true;
-    return item.label.toLowerCase().includes(searchTerm.trim().toLowerCase());
+    return true;
   });
 
   return (
     <aside className={`sidebar ${isOpen ? "open" : "collapsed"}`}>
-      {/* 1. Mac Window Traffic Lights */}
-      <div className="sidebar-mac-dots" aria-hidden="true">
-        <span className="mac-dot red" />
-        <span className="mac-dot yellow" />
-        <span className="mac-dot green" />
-      </div>
-
-      {/* 2. User Profile Row */}
+      {/* User Profile Row */}
       <div className="sidebar-user-row">
-        <div className="sidebar-avatar" title={displayName}>
-          {user?.avatarUrl ? (
-            <img src={user.avatarUrl} alt={displayName} className="sidebar-avatar-img" />
-          ) : (
-            <svg viewBox="0 0 40 40" width="38" height="38" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <circle cx="20" cy="20" r="20" fill="#fbcfe8" />
-              <path d="M12 20c0-6 3.5-12 8-12s8 6 8 12c0 5-2 9-2 9l-12 0s-2-4-2-9z" fill="#311915" />
-              <ellipse cx="20" cy="18" rx="5.5" ry="6.5" fill="#fcd3b8" />
-              <path d="M14.5 16c1-4 4.5-5 5.5-5s4.5 1 5.5 5c.5 2 1 6 1 8-1-1-2.5-3-2.5-5 0-3-2.5-3.5-4-3.5s-4 .5-4 3.5c0 2-1.5 4-2.5 5 0-2 .5-6 1-8z" fill="#24120e" />
-              <rect x="18.5" y="23" width="3" height="4" fill="#f5ba93" />
-              <path d="M13 29c1-3 4-4 7-4s6 1 7 4l2 7H11l2-7z" fill="#e11d48" />
-              <path d="M17 26l3 3 3-3" stroke="#fcd3b8" strokeWidth="1.5" strokeLinecap="round" />
-            </svg>
-          )}
-        </div>
-
+        
         {isOpen && (
           <div className="sidebar-user-info">
             <span className="sidebar-user-name" title={displayName}>
@@ -198,41 +170,6 @@ export default function Sidebar({
           >
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
               {isOpen ? <polyline points="15 18 9 12 15 6" /> : <polyline points="9 18 15 12 9 6" />}
-            </svg>
-          </button>
-        )}
-      </div>
-
-      {/* 3. Search Bar Pill */}
-      <div className="sidebar-search-container">
-        {isOpen ? (
-          <div className="sidebar-search-pill">
-            <span className="sidebar-search-icon" aria-hidden="true">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                <circle cx="11" cy="11" r="8" />
-                <line x1="21" y1="21" x2="16.65" y2="16.65" />
-              </svg>
-            </span>
-            <input
-              type="text"
-              className="sidebar-search-input"
-              placeholder="Search..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              aria-label="Search navigation"
-            />
-          </div>
-        ) : (
-          <button
-            type="button"
-            className="sidebar-search-btn-collapsed"
-            onClick={onToggle}
-            title="Search menu"
-            aria-label="Expand and search menu"
-          >
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-              <circle cx="11" cy="11" r="8" />
-              <line x1="21" y1="21" x2="16.65" y2="16.65" />
             </svg>
           </button>
         )}
@@ -276,17 +213,6 @@ export default function Sidebar({
           </NavLink>
         ))}
       </nav>
-
-      {/* Mobile Close Button (only displayed on phone drawer) */}
-      <button
-        type="button"
-        className="sidebar-mobile-close-btn"
-        onClick={onClose}
-        aria-label="Close navigation"
-        title="Close sidebar"
-      >
-        &times;
-      </button>
     </aside>
   );
 }

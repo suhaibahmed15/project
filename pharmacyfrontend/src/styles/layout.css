@@ -8,19 +8,17 @@
   width: 100%;
   position: relative;
   overflow-x: hidden;
-  background-color: #f1f5f9;
+  background-color: #F8FAFC;
 }
 
 .sidebar-backdrop {
   display: none;
 }
 
-/* Glassmorphic Floating Sidebar */
+/* Glassmorphic Floating Sidebar (Evergreen #152614) */
 .sidebar {
   width: 250px;
-  background: linear-gradient(180deg, rgba(32, 29, 52, 0.94) 0%, rgba(18, 17, 34, 0.97) 100%);
-  backdrop-filter: blur(28px) saturate(190%);
-  -webkit-backdrop-filter: blur(28px) saturate(190%);
+  background: #152614;
   color: #f8fafc;
   display: flex;
   flex-direction: column;
@@ -31,7 +29,7 @@
   height: calc(100vh - 28px);
   border-radius: 26px;
   border: 1px solid rgba(255, 255, 255, 0.12);
-  box-shadow: 0 16px 45px rgba(0, 0, 0, 0.42), 0 0 0 1px rgba(255, 255, 255, 0.05);
+  box-shadow: 0 16px 45px rgba(10, 20, 10, 0.45);
   z-index: 100;
   transition: width 240ms cubic-bezier(0.4, 0, 0.2, 1), transform 240ms cubic-bezier(0.4, 0, 0.2, 1);
   overflow: visible;
@@ -47,61 +45,22 @@
   transform: none;
 }
 
-/* 1. Traffic Lights (macOS Dots) */
-.sidebar-mac-dots {
-  display: flex;
-  align-items: center;
-  gap: 7px;
-  padding: 16px 20px 10px 20px;
-  flex-shrink: 0;
-}
-
-.sidebar.collapsed .sidebar-mac-dots {
-  justify-content: center;
-  padding: 16px 0 10px 0;
-  gap: 5px;
-}
-
-.mac-dot {
-  width: 9px;
-  height: 9px;
-  border-radius: 50%;
-  display: inline-block;
-  transition: transform 0.15s ease;
-}
-
-.mac-dot.red {
-  background-color: #ff5f56;
-  box-shadow: 0 0 6px rgba(255, 95, 86, 0.5);
-}
-
-.mac-dot.yellow {
-  background-color: #ffbd2e;
-  box-shadow: 0 0 6px rgba(255, 189, 46, 0.5);
-}
-
-.mac-dot.green {
-  background-color: #27c93f;
-  box-shadow: 0 0 6px rgba(39, 201, 63, 0.5);
-}
-
-.mac-dot:hover {
-  transform: scale(1.18);
-}
-
-/* 2. User Profile Row */
+/* User Profile Row */
 .sidebar-user-row {
   position: relative;
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 8px 18px 14px 18px;
+  padding: 18px 18px 14px 18px;
+  min-height: 60px;
+  box-sizing: border-box;
   flex-shrink: 0;
 }
 
 .sidebar.collapsed .sidebar-user-row {
   justify-content: center;
-  padding: 8px 0 14px 0;
+  padding: 18px 0 14px 0;
+  min-height: 60px;
 }
 
 .sidebar-avatar {
@@ -151,32 +110,32 @@
   margin-top: 2px;
 }
 
-/* Floating Edge Toggle Pill (Chevron) */
+/* Floating Edge Toggle Pill (Chevron Arrow) */
 .sidebar-toggle-pill {
   position: absolute;
-  right: -11px;
+  right: -12px;
   top: 50%;
   transform: translateY(-50%);
-  width: 22px;
-  height: 22px;
+  width: 24px;
+  height: 24px;
   border-radius: 50%;
   background-color: #ffffff;
-  color: #1e1b2e;
-  border: none;
+  color: #152614;
+  border: 1px solid rgba(0, 0, 0, 0.12);
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.38);
-  transition: transform 0.18s ease, background-color 0.18s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+  transition: transform 0.18s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.18s ease, box-shadow 0.18s ease;
   z-index: 25;
   padding: 0;
 }
 
 .sidebar-toggle-pill:hover {
   background-color: #f8fafc;
-  transform: translateY(-50%) scale(1.15);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.45);
+  transform: translateY(-50%) scale(1.18);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.45);
 }
 
 /* 3. Search Bar Container */
@@ -355,8 +314,8 @@
   background-color: rgba(255, 255, 255, 0.14);
   color: #ffffff;
   font-weight: 600;
-  border-color: rgba(255, 255, 255, 0.12);
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  border-color: rgba(255, 255, 255, 0.25);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.25);
 }
 
 .sidebar-link.active .sidebar-link-icon {
@@ -448,11 +407,7 @@
   letter-spacing: 0.5px;
 }
 
-.sidebar-mobile-close-btn {
-  display: none;
-}
-
-/* Main Area Layout */
+/* Main Area Layout (Off-White #F8FAFC) */
 .main-area {
   flex: 1;
   margin-left: 278px;
@@ -460,7 +415,7 @@
   flex-direction: column;
   min-height: 100vh;
   transition: margin-left 240ms cubic-bezier(0.4, 0, 0.2, 1), width 240ms cubic-bezier(0.4, 0, 0.2, 1);
-  background-color: #f8fafc;
+  background-color: #F8FAFC;
   min-width: 0;
   width: calc(100% - 278px);
   max-width: calc(100% - 278px);
@@ -472,11 +427,11 @@
   max-width: calc(100% - 104px);
 }
 
-/* Topbar */
+/* Topbar (Off-White #FFFFFF) */
 .topbar {
   height: 64px;
-  background-color: #ffffff;
-  border-bottom: 1px solid var(--color-border, #e2e8f0);
+  background-color: #FFFFFF;
+  border-bottom: 1px solid var(--color-border, #E2E8F0);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -496,29 +451,12 @@
   min-width: 0;
 }
 
-.sidebar-toggle-btn {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  background: none;
-  border: 1px solid var(--color-border, #e2e8f0);
-  border-radius: var(--radius-sm, 4px);
-  padding: 7px;
-  cursor: pointer;
-  transition: background-color var(--transition-fast, 150ms);
-  flex-shrink: 0;
+/* Responsive Topbar Arrow Button (Hidden on Desktop) */
+.topbar-arrow-btn {
+  display: none;
 }
 
-.sidebar-toggle-btn:hover {
-  background-color: var(--color-bg-subtle, #f1f5f9);
-}
 
-.hamburger-bar {
-  width: 18px;
-  height: 2px;
-  background-color: var(--color-text-main, #0f172a);
-  border-radius: 2px;
-}
 
 .topbar-brand-title {
   display: flex;
@@ -530,7 +468,7 @@
 
 .system-pill {
   font-weight: 700;
-  color: #0f172a;
+  color: #152614;
   letter-spacing: 0.2px;
 }
 
@@ -538,8 +476,9 @@
   font-size: 11px;
   font-weight: 600;
   text-transform: uppercase;
-  color: #0f2e59;
-  background-color: #e8eef6;
+  color: #152614;
+  background-color: #F1F5F9;
+  border: 1px solid #E2E8F0;
   padding: 2px 7px;
   border-radius: var(--radius-full, 9999px);
 }
@@ -558,12 +497,12 @@
 
 .topbar-alert-btn {
   position: relative;
-  background: none;
-  border: 1px solid var(--color-border, #e2e8f0);
+  background: #FFFFFF;
+  border: 1px solid var(--color-border, #E2E8F0);
   border-radius: var(--radius-md, 6px);
   padding: 7px 9px;
   cursor: pointer;
-  color: #475569;
+  color: #152614;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -573,9 +512,9 @@
 
 .topbar-alert-btn:hover,
 .topbar-alert-btn.active {
-  background-color: #f1f5f9;
-  color: #0f172a;
-  border-color: #cbd5e1;
+  background-color: #F1F5F9;
+  color: #152614;
+  border-color: #CBD5E1;
 }
 
 .topbar-alert-badge {
@@ -594,7 +533,7 @@
   align-items: center;
   justify-content: center;
   box-shadow: 0 2px 4px rgba(239, 68, 68, 0.4);
-  border: 2px solid #ffffff;
+  border: 2px solid #FFFFFF;
 }
 
 .topbar-alert-dropdown {
@@ -602,8 +541,8 @@
   top: calc(100% + 8px);
   right: 0;
   width: 330px;
-  background-color: #ffffff;
-  border: 1px solid var(--color-border, #e2e8f0);
+  background-color: #FFFFFF;
+  border: 1px solid var(--color-border, #E2E8F0);
   border-radius: var(--radius-lg, 10px);
   box-shadow: var(--shadow-lg, 0 10px 15px -3px rgba(0, 0, 0, 0.1));
   z-index: 1000;
@@ -631,7 +570,7 @@
   border: none;
   font-size: 11px;
   font-weight: 600;
-  color: #0f2e59;
+  color: #152614;
   cursor: pointer;
   padding: 0;
 }
@@ -772,15 +711,15 @@
   gap: 10px;
   padding: 4px 10px;
   border-radius: var(--radius-md, 6px);
-  border: 1px solid #e2e8f0;
-  background-color: #f8fafc;
+  border: 1px solid var(--color-border, #E2E8F0);
+  background-color: #F8FAFC;
   flex-shrink: 0;
 }
 
 .topbar-avatar {
   width: 32px;
   height: 32px;
-  background: linear-gradient(135deg, #0f2e59, #f59e0b);
+  background: #152614;
   color: #ffffff;
   font-weight: 700;
   font-size: 13px;
@@ -788,7 +727,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 2px 4px rgba(15, 46, 89, 0.25);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
   flex-shrink: 0;
 }
 
@@ -801,13 +740,14 @@
 .topbar-user-name {
   font-size: 12.5px;
   font-weight: 600;
-  color: #0f172a;
+  color: #152614;
   white-space: nowrap;
 }
 
 .topbar-user-email {
   font-size: 10.5px;
   color: #64748b;
+  opacity: 0.9;
   max-width: 140px;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -815,9 +755,9 @@
 }
 
 .topbar-logout-btn {
-  background-color: transparent;
-  color: var(--color-danger, #dc2626);
-  border: 1px solid #fecaca;
+  background-color: #152614;
+  color: #ffffff;
+  border: 1px solid #152614;
   padding: 6px 14px;
   border-radius: var(--radius-sm, 4px);
   font-size: 12px;
@@ -829,9 +769,9 @@
 }
 
 .topbar-logout-btn:hover {
-  background-color: var(--color-danger, #dc2626);
+  background-color: #223d20;
   color: #ffffff;
-  border-color: var(--color-danger, #dc2626);
+  border-color: #223d20;
 }
 
 /* Page Content Area & Welcome Screen */
@@ -855,12 +795,12 @@
 .welcome-card {
   max-width: 580px;
   width: 100%;
-  background-color: #ffffff;
-  border: 1px solid var(--color-border, #e2e8f0);
+  background-color: #FFFFFF;
+  border: 1px solid var(--color-border, #E2E8F0);
   border-radius: 16px;
   padding: 56px 40px;
   text-align: center;
-  box-shadow: 0 10px 30px -10px rgba(15, 23, 42, 0.08), 0 4px 6px -2px rgba(0, 0, 0, 0.03);
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.06), 0 4px 6px -2px rgba(0, 0, 0, 0.02);
   position: relative;
   overflow: hidden;
   transition: transform var(--transition-normal, 250ms), box-shadow var(--transition-normal, 250ms);
@@ -869,7 +809,7 @@
 
 .welcome-card:hover {
   transform: translateY(-2px);
-  box-shadow: 0 15px 35px -10px rgba(15, 23, 42, 0.12), 0 6px 10px -2px rgba(0, 0, 0, 0.04);
+  box-shadow: 0 15px 35px -10px rgba(0, 0, 0, 0.09), 0 6px 10px -2px rgba(0, 0, 0, 0.03);
 }
 
 .welcome-card::before {
@@ -879,7 +819,7 @@
   left: 0;
   right: 0;
   height: 4px;
-  background: linear-gradient(90deg, #0f2e59, #f59e0b);
+  background: linear-gradient(90deg, #152614, #223d20);
 }
 
 .welcome-role-tag {
@@ -887,10 +827,10 @@
   align-items: center;
   gap: 8px;
   padding: 6px 16px;
-  background-color: #e8eef6;
-  border: 1px solid #cdd9e8;
+  background-color: #F1F5F9;
+  border: 1px solid #E2E8F0;
   border-radius: 9999px;
-  color: #0f2e59;
+  color: #152614;
   font-size: 13px;
   font-weight: 600;
   margin-bottom: 24px;
@@ -917,7 +857,7 @@
 }
 
 .welcome-role-name {
-  background: linear-gradient(135deg, #0f2e59 0%, #f59e0b 100%);
+  background: linear-gradient(135deg, #152614 0%, #223d20 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
@@ -996,29 +936,55 @@
     transform: translateX(-120%) !important;
   }
 
-  .sidebar-mobile-close-btn {
-    display: flex;
-    position: absolute;
-    top: 12px;
-    right: 14px;
-    background: rgba(255, 255, 255, 0.1);
-    border: none;
-    color: #ffffff;
-    font-size: 22px;
-    width: 28px;
-    height: 28px;
-    border-radius: 50%;
+  /* Responsive Topbar Arrow Toggle Button */
+  .topbar-arrow-btn {
+    display: inline-flex;
     align-items: center;
     justify-content: center;
-    line-height: 1;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background-color: #152614;
+    color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.2);
     cursor: pointer;
-    transition: background-color var(--transition-fast, 150ms);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.22);
+    transition: background-color 0.16s ease, transform 0.16s ease;
+    flex-shrink: 0;
+    padding: 0;
+  }
+
+  .topbar-arrow-btn:hover {
+    background-color: #1e381d;
+    transform: scale(1.08);
+  }
+
+  .topbar-arrow-btn:active {
+    transform: scale(0.95);
+  }
+
+  /* When sidebar drawer is open on mobile, style the drawer's arrow button */
+  .sidebar.open .sidebar-toggle-pill {
+    position: absolute;
+    top: 50%;
+    right: 14px;
+    transform: translateY(-50%);
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.18);
+    color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
     z-index: 30;
   }
 
-  .sidebar-mobile-close-btn:hover {
-    background: rgba(255, 255, 255, 0.25);
-    color: #ffffff;
+  .sidebar.open .sidebar-toggle-pill:hover {
+    background: rgba(255, 255, 255, 0.32);
+    transform: translateY(-50%) scale(1.1);
   }
 
   .main-area {

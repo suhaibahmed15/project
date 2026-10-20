@@ -11,15 +11,16 @@
 @import "./styles/users.css";
 @import "./styles/batches.css";
 @import "./styles/intelligence.css";
+@import "./styles/ledger.css";
 @import "./styles/statusPages.css";
 
 /* Design Tokens & Root Variables */
 :root {
-  /* Brand Color Palette: Deep Navy & Vibrant Orange */
-  --color-primary: #0f2e59;
-  --color-primary-hover: #0a2244;
-  --color-primary-light: #e8eef6;
-  --color-primary-dark: #071933;
+  /* Brand Color Palette: Evergreen (#152614) & Off-White (#F8FAFC) */
+  --color-primary: #152614;
+  --color-primary-hover: #223d20;
+  --color-primary-light: #e6f7c8;
+  --color-primary-dark: #0d1a0d;
 
   --color-accent: #f59e0b;
   --color-accent-hover: #d97706;
@@ -44,12 +45,12 @@
   --color-danger-light: #fee2e2;
   --color-danger-text: #991b1b;
 
-  --color-bg-app: #f8fafc;
-  --color-bg-card: #ffffff;
-  --color-bg-subtle: #f1f5f9;
+  --color-bg-app: #F8FAFC;
+  --color-bg-card: #FFFFFF;
+  --color-bg-subtle: #F1F5F9;
 
-  --color-border: #e2e8f0;
-  --color-border-focus: #0f2e59;
+  --color-border: #E2E8F0;
+  --color-border-focus: #152614;
 
   --color-text-main: #0f172a;
   --color-text-muted: #64748b;

@@ -6,18 +6,36 @@ export default function PharmacySummaryCard({ stats = {} }) {
       <h3 className="panel-title">Pharmacy Summary</h3>
       <div className="panel-list" style={{ marginTop: "14px" }}>
         <div className="panel-item">
+          <span className="panel-item-label">Total Stock Units</span>
+          <span className="panel-item-val font-semibold">
+            {(stats.totalStockUnits || 0).toLocaleString()}
+          </span>
+        </div>
+        <div className="panel-item">
+          <span className="panel-item-label">Total Stock Value</span>
+          <span className="panel-item-val text-emerald">
+            PKR {(stats.totalStockValue || 0).toLocaleString(undefined, {
+              minimumFractionDigits: 0,
+              maximumFractionDigits: 2
+            })}
+          </span>
+        </div>
+        <div className="panel-item">
+          <span className="panel-item-label">Total Purchases</span>
+          <span className="panel-item-val">
+            PKR {(stats.totalPurchaseAmount || 0).toLocaleString(undefined, {
+              minimumFractionDigits: 0,
+              maximumFractionDigits: 2
+            })}
+          </span>
+        </div>
+        <div className="panel-item">
           <span className="panel-item-label">Categories</span>
           <span className="panel-item-val">{stats.totalCategories || 0}</span>
         </div>
         <div className="panel-item">
           <span className="panel-item-label">Suppliers</span>
           <span className="panel-item-val">{stats.totalSuppliers || 0}</span>
-        </div>
-        <div className="panel-item">
-          <span className="panel-item-label">Total Purchases</span>
-          <span className="panel-item-val text-emerald">
-            PKR {(stats.totalPurchaseAmount || 0).toLocaleString()}
-          </span>
         </div>
       </div>
     </div>

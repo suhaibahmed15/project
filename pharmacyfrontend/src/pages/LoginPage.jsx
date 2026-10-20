@@ -57,11 +57,6 @@ export default function LoginPage() {
 
   return (
     <div className="login-page-wrapper">
-      {/* Corner Geometric Background Shapes */}
-      <div className="corner-shape-top-left" aria-hidden="true" />
-      <div className="corner-shape-bottom-left-outer" aria-hidden="true" />
-      <div className="corner-shape-bottom-left-inner" aria-hidden="true" />
-
       {/* Main Split Content */}
       <div className="login-container">
         {/* Left Column: Brand Identity */}
@@ -132,9 +127,9 @@ export default function LoginPage() {
                       padding: "6px 14px",
                       fontSize: "12px",
                       fontWeight: "600",
-                      color: "#0f2e59",
-                      backgroundColor: "#e8eef6",
-                      border: "none",
+                      color: "#152614",
+                      backgroundColor: "#F1F5F9",
+                      border: "1px solid #E2E8F0",
                       borderRadius: "6px",
                       textDecoration: "none"
                     }}
@@ -233,7 +228,7 @@ export default function LoginPage() {
                 className="login-submit-btn"
               >
                 <span>{loading ? "Signing in..." : "Login"}</span>
-                {!loading && <span className="login-arrow-icon">→</span>}
+                {/* {!loading && <span className="login-arrow-icon">→</span>} */}
               </button>
             </form>
           </div>

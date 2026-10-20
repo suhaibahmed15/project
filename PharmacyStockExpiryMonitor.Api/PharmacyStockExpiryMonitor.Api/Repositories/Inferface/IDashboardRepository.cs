@@ -1,4 +1,4 @@
-﻿using PharmacyStockExpiryMonitor.Api.DTOs.Dashboard;
+using PharmacyStockExpiryMonitor.Api.DTOs.Dashboard;
 
 namespace PharmacyStockExpiryMonitor.Api.Repositories.Interfaces
 {
@@ -21,6 +21,12 @@ namespace PharmacyStockExpiryMonitor.Api.Repositories.Interfaces
         Task<int> GetUnreadAlertsCountAsync();
 
         Task<decimal> GetTotalPurchaseAmountAsync();
+
+        Task<decimal> GetTotalStockValueAsync();
+
+        Task<int> GetTotalStockUnitsAsync();
+
+        Task<List<StockLedgerChartPointDto>> GetStockLedgerChartDataAsync();
 
         Task<DashboardSummaryDto> GetSummaryAsync();
     }

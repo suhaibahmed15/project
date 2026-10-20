@@ -23,7 +23,9 @@ namespace PharmacyStockExpiryMonitor.Api.Services
             {
                 Id = alert.Id,
                 MedicineId = alert.MedicineId,
+                MedicineName = alert.Medicine?.Name,
                 BatchId = alert.BatchId,
+                BatchNumber = alert.Batch?.BatchNumber,
                 AlertType = alert.AlertType,
                 Message = alert.Message,
                 IsRead = alert.IsRead,
@@ -47,7 +49,9 @@ namespace PharmacyStockExpiryMonitor.Api.Services
             {
                 Id = alert.Id,
                 MedicineId = alert.MedicineId,
+                MedicineName = alert.Medicine?.Name,
                 BatchId = alert.BatchId,
+                BatchNumber = alert.Batch?.BatchNumber,
                 AlertType = alert.AlertType,
                 Message = alert.Message,
                 IsRead = alert.IsRead,
@@ -80,20 +84,25 @@ namespace PharmacyStockExpiryMonitor.Api.Services
             var createdAlert =
                 await _repository.AddAsync(alert);
 
+            // Re-fetch to get navigation properties if needed
+            var loaded = await _repository.GetByIdAsync(createdAlert.Id) ?? createdAlert;
+
             return new AlertDto
             {
-                Id = createdAlert.Id,
-                MedicineId = createdAlert.MedicineId,
-                BatchId = createdAlert.BatchId,
-                AlertType = createdAlert.AlertType,
-                Message = createdAlert.Message,
-                IsRead = createdAlert.IsRead,
-                IsResolved = createdAlert.IsResolved,
-                ResolvedAt = createdAlert.ResolvedAt,
-                CreatedAt = createdAlert.CreatedAt,
-                CreatedBy = createdAlert.CreatedBy,
-                UpdatedAt = createdAlert.UpdatedAt,
-                UpdatedBy = createdAlert.UpdatedBy
+                Id = loaded.Id,
+                MedicineId = loaded.MedicineId,
+                MedicineName = loaded.Medicine?.Name,
+                BatchId = loaded.BatchId,
+                BatchNumber = loaded.Batch?.BatchNumber,
+                AlertType = loaded.AlertType,
+                Message = loaded.Message,
+                IsRead = loaded.IsRead,
+                IsResolved = loaded.IsResolved,
+                ResolvedAt = loaded.ResolvedAt,
+                CreatedAt = loaded.CreatedAt,
+                CreatedBy = loaded.CreatedBy,
+                UpdatedAt = loaded.UpdatedAt,
+                UpdatedBy = loaded.UpdatedBy
             };
         }
 

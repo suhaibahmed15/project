@@ -56,9 +56,9 @@ export default function Pagination({
             className="decent-btn"
             style={{
               fontWeight: p === page ? "700" : "500",
-              backgroundColor: p === page ? "#0f2e59" : "#ffffff",
+              backgroundColor: p === page ? "#152614" : "#ffffff",
               color: p === page ? "#ffffff" : "#334155",
-              borderColor: p === page ? "#0f2e59" : "#cbd5e1"
+              borderColor: p === page ? "#152614" : "#E2E8F0"
             }}
             onClick={() => onPageChange(p)}
           >

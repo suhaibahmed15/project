@@ -210,7 +210,7 @@ export default function BatchListCard({
                     <td style={{ fontWeight: "600", color: "#334155" }}>
                       PKR {Number(batch.unitCost || 0).toLocaleString()}
                     </td>
-                    <td style={{ fontWeight: "600", color: "#0f2e59" }}>
+                    <td style={{ fontWeight: "600", color: "#152614" }}>
                       PKR {totalValue.toLocaleString()}
                     </td>
                     <td style={{ textAlign: "right", whiteSpace: "nowrap" }}>

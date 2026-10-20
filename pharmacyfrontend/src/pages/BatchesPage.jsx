@@ -10,9 +10,12 @@ import "../styles/batches.css";
 export default function BatchesPage() {
   const { isAdmin, isStoreManager, isPharmacist, roleId } = useAuth();
 
-  const canDelete = Boolean(isAdmin || roleId === 1);
-  const canEdit = Boolean(isAdmin || isStoreManager || isPharmacist || roleId === 1 || roleId === 2 || roleId === 3);
-  const canCreate = Boolean(isAdmin || isStoreManager || roleId === 1 || roleId === 2);
+  // Permissions:
+  // - Deletion: Admin only
+  // - Create & Edit: Admin, Store Manager, and Pharmacist
+  const canDelete = Boolean(isAdmin || roleId === 1 || roleId === "1");
+  const canEdit = Boolean(isAdmin || isStoreManager || isPharmacist || roleId === 1 || roleId === 2 || roleId === 3 || roleId === "1" || roleId === "2" || roleId === "3");
+  const canCreate = Boolean(isAdmin || isStoreManager || isPharmacist || roleId === 1 || roleId === 2 || roleId === 3 || roleId === "1" || roleId === "2" || roleId === "3");
 
   // Data states
   const [batches, setBatches] = useState([]);

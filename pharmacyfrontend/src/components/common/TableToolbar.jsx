@@ -18,8 +18,8 @@ export default function TableToolbar({
       {/* Header with Title and Add Button */}
       <div className="decent-page-header">
         <div>
-          <h2 className="decent-page-title">{title}</h2>
-          {subtitle && <span className="decent-page-subtitle">{subtitle}</span>}
+          <h1 className="decent-page-title">{title}</h1>
+          {subtitle && <p className="decent-page-subtitle">{subtitle}</p>}
         </div>
 
         {onAddClick && (

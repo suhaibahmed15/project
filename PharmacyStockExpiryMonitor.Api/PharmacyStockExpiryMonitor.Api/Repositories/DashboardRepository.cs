@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using PharmacyStockExpiryMonitor.Api.Data;
 using PharmacyStockExpiryMonitor.Api.DTOs.Dashboard;
 using PharmacyStockExpiryMonitor.Api.Repositories.Interfaces;
@@ -87,6 +87,81 @@ namespace PharmacyStockExpiryMonitor.Api.Repositories
                 .SumAsync(p => (decimal?)p.TotalAmount) ?? 0;
         }
 
+        public async Task<decimal> GetTotalStockValueAsync()
+        {
+            return await _context.Batches
+                .Where(b => !b.IsDeleted && b.RemainingQuantity > 0)
+                .SumAsync(b => (decimal?)((decimal)b.RemainingQuantity * b.UnitCost)) ?? 0;
+        }
+
+        public async Task<int> GetTotalStockUnitsAsync()
+        {
+            return await _context.Batches
+                .Where(b => !b.IsDeleted)
+                .SumAsync(b => (int?)b.RemainingQuantity) ?? 0;
+        }
+
+        public async Task<List<StockLedgerChartPointDto>> GetStockLedgerChartDataAsync()
+        {
+            var today = DateTime.UtcNow.Date;
+
+            // Find the most recent transaction date to anchor the timeline (default to today)
+            var latestTxDate = await _context.StockTransactions
+                .OrderByDescending(t => t.CreatedAt)
+                .Select(t => (DateTime?)t.CreatedAt)
+                .FirstOrDefaultAsync();
+
+            var refDate = latestTxDate.HasValue ? latestTxDate.Value.Date : today;
+            var startMonth = new DateTime(refDate.Year, refDate.Month, 1, 0, 0, 0, DateTimeKind.Utc).AddMonths(-5);
+            var endMonth = new DateTime(refDate.Year, refDate.Month, 1, 0, 0, 0, DateTimeKind.Utc).AddMonths(1);
+
+            var transactions = await _context.StockTransactions
+                .Where(t => t.CreatedAt >= startMonth && t.CreatedAt < endMonth)
+                .Select(t => new
+                {
+                    t.TransactionType,
+                    t.Quantity,
+                    t.CreatedAt
+                })
+                .ToListAsync();
+
+            var chartPoints = new List<StockLedgerChartPointDto>();
+            for (int i = 5; i >= 0; i--)
+            {
+                var monthStart = new DateTime(refDate.Year, refDate.Month, 1, 0, 0, 0, DateTimeKind.Utc).AddMonths(-i);
+                var monthEnd = monthStart.AddMonths(1);
+                var monthLabel = monthStart.ToString("MMM yyyy");
+
+                var monthTx = transactions
+                    .Where(t => t.CreatedAt >= monthStart && t.CreatedAt < monthEnd)
+                    .ToList();
+
+                var stockIn = monthTx
+                    .Where(t => t.TransactionType == Enums.StockTransactionType.StockIn)
+                    .Sum(t => t.Quantity);
+
+                var stockOut = monthTx
+                    .Where(t => t.TransactionType == Enums.StockTransactionType.StockOut)
+                    .Sum(t => t.Quantity);
+
+                var adjustments = monthTx
+                    .Where(t => t.TransactionType == Enums.StockTransactionType.Adjustment ||
+                                t.TransactionType == Enums.StockTransactionType.Transfer)
+                    .Sum(t => t.Quantity);
+
+                chartPoints.Add(new StockLedgerChartPointDto
+                {
+                    Period = monthLabel,
+                    StockIn = stockIn,
+                    StockOut = stockOut,
+                    Adjustments = adjustments,
+                    TotalTransactions = monthTx.Count
+                });
+            }
+
+            return chartPoints;
+        }
+
         public async Task<DashboardSummaryDto> GetSummaryAsync()
         {
             return new DashboardSummaryDto
@@ -116,7 +191,16 @@ namespace PharmacyStockExpiryMonitor.Api.Repositories
                     await GetUnreadAlertsCountAsync(),
 
                 TotalPurchaseAmount =
-                    await GetTotalPurchaseAmountAsync()
+                    await GetTotalPurchaseAmountAsync(),
+
+                TotalStockValue =
+                    await GetTotalStockValueAsync(),
+
+                TotalStockUnits =
+                    await GetTotalStockUnitsAsync(),
+
+                StockLedgerData =
+                    await GetStockLedgerChartDataAsync()
             };
         }
     }

@@ -1,4 +1,4 @@
-﻿using PharmacyStockExpiryMonitor.Api.DTOs.Dashboard;
+using PharmacyStockExpiryMonitor.Api.DTOs.Dashboard;
 
 namespace PharmacyStockExpiryMonitor.Api.Services.Interfaces
 {

@@ -1,4 +1,4 @@
-﻿namespace PharmacyStockExpiryMonitor.Api.DTOs.Dashboard
+namespace PharmacyStockExpiryMonitor.Api.DTOs.Dashboard
 {
     public class DashboardSummaryDto
     {
@@ -19,5 +19,24 @@
         public int UnreadAlertsCount { get; set; }
 
         public decimal TotalPurchaseAmount { get; set; }
+
+        public decimal TotalStockValue { get; set; }
+
+        public int TotalStockUnits { get; set; }
+
+        public List<StockLedgerChartPointDto> StockLedgerData { get; set; } = new();
+    }
+
+    public class StockLedgerChartPointDto
+    {
+        public string Period { get; set; } = string.Empty;
+
+        public int StockIn { get; set; }
+
+        public int StockOut { get; set; }
+
+        public int Adjustments { get; set; }
+
+        public int TotalTransactions { get; set; }
     }
 }

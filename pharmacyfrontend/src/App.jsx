@@ -8,12 +8,13 @@ import LoginPage from "./pages/LoginPage";
 import DashboardPage from "./pages/DashboardPage";
 import MedicinesPage from "./pages/MedicinesPage";
 import BatchesPage from "./pages/BatchesPage";
-import Alertspage from "./pages/AlertsPage";
+import AlertsPage from "./pages/AlertsPage";
 import IntelligencePage from "./pages/IntelligencePage";
 import UnauthorizedPage from "./pages/UnauthorizedPage";
 import NotFoundPage from "./pages/NotFoundPage";
 import ErrorPage from "./pages/ErrorPage";
 import UsersPage from "./pages/UsersPage";
+import StockLedgerPage from "./pages/StockLedgerPage";
 
 export default function App() {
   return (
@@ -30,16 +31,13 @@ export default function App() {
               <Route path="/medicines" element={<MedicinesPage />} />
               <Route path="/batches" element={<BatchesPage />} />
               <Route path="/batch" element={<BatchesPage />} />
-              <Route path="/alerts" element={<Alertspage />} />
-              <Route path="/transactions" element={<DashboardPage />} />
+              <Route path="/alerts" element={<AlertsPage />} />
+              <Route path="/transactions" element={<StockLedgerPage />} />
+              <Route path="/ledger" element={<StockLedgerPage />} />
               <Route path="/purchases" element={<DashboardPage />} />
               <Route path="/categories" element={<DashboardPage />} />
               <Route path="/suppliers" element={<DashboardPage />} />
-
-              {/* Store Manager & Admin Only AI Intelligence Routes */}
-              <Route element={<ManagerOrAdminRoute />}>
-                <Route path="/intelligence" element={<IntelligencePage />} />
-              </Route>
+              <Route path="/intelligence" element={<IntelligencePage />} />
 
               {/* Admin Only User Management Routes */}
               <Route element={<AdminRoute />}>

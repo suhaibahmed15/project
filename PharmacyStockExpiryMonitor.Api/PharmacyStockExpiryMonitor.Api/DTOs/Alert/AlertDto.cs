@@ -8,7 +8,11 @@ namespace PharmacyStockExpiryMonitor.Api.DTOs.Alert
 
         public int MedicineId { get; set; }
 
+        public string? MedicineName { get; set; }
+
         public int? BatchId { get; set; }
+
+        public string? BatchNumber { get; set; }
 
         public AlertType AlertType { get; set; }
 

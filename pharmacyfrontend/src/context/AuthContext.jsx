@@ -109,6 +109,8 @@ export function AuthProvider({ children }) {
     isAdmin: userRoleId === 1,
     isStoreManager: userRoleId === 2,
     isPharmacist: userRoleId === 3,
+    canDelete: userRoleId === 1,
+    canManageUsers: userRoleId === 1,
     login,
     logout
   };

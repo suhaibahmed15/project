@@ -16,11 +16,11 @@
   justify-content: space-between;
   flex-wrap: wrap;
   gap: 16px;
-  background-color: #ffffff;
+  background-color: #FFFFFF;
   padding: 20px 24px;
   border-radius: var(--radius-lg, 12px);
-  border: 1px solid var(--color-border, #e2e8f0);
-  box-shadow: var(--shadow-sm, 0 1px 2px rgba(0, 0, 0, 0.05));
+  border: 1px solid var(--color-border, #E2E8F0);
+  box-shadow: var(--shadow-sm, 0 1px 2px rgba(0, 0, 0, 0.04));
 }
 
 .users-title {
@@ -76,11 +76,11 @@
 
 /* Content Cards */
 .users-content-card {
-  background: #ffffff;
-  border: 1px solid var(--color-border, #e2e8f0);
+  background: #FFFFFF;
+  border: 1px solid var(--color-border, #E2E8F0);
   border-radius: var(--radius-lg, 12px);
   padding: 24px;
-  box-shadow: var(--shadow-sm, 0 1px 2px rgba(0, 0, 0, 0.05));
+  box-shadow: var(--shadow-sm, 0 1px 2px rgba(0, 0, 0, 0.04));
 }
 
 .users-card-header {
@@ -168,7 +168,7 @@
 }
 
 .role-select:focus {
-  border-color: var(--color-primary, #0f2e59);
+  border-color: var(--color-primary, #152614);
 }
 
 .btn-danger-outline {
@@ -202,12 +202,13 @@
 }
 
 .users-modal-content {
-  background: #ffffff;
+  background: #FFFFFF;
+  border: 1px solid var(--color-border, #E2E8F0);
   border-radius: var(--radius-lg, 12px);
   max-width: 480px;
   width: 100%;
   padding: 28px;
-  box-shadow: var(--shadow-lg, 0 10px 25px rgba(0, 0, 0, 0.15));
+  box-shadow: var(--shadow-lg, 0 10px 25px rgba(0, 0, 0, 0.12));
 }
 
 .users-modal-header {

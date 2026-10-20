@@ -15,9 +15,9 @@ export default function MedicinesPage() {
 
   // Role permissions:
   // - Only Admin can delete
-  // - Admin, StoreManager, and Pharmacist can edit
-  const canDelete = Boolean(isAdmin || roleId === 1);
-  const canEdit = Boolean(isAdmin || isStoreManager || isPharmacist || roleId === 1 || roleId === 2 || roleId === 3);
+  // - Admin, StoreManager, and Pharmacist can create and edit
+  const canDelete = Boolean(isAdmin || roleId === 1 || roleId === "1");
+  const canEdit = Boolean(isAdmin || isStoreManager || isPharmacist || roleId === 1 || roleId === 2 || roleId === 3 || roleId === "1" || roleId === "2" || roleId === "3");
 
   // Data states
   const [medicines, setMedicines] = useState([]);

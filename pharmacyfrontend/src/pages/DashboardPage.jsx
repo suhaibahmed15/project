@@ -29,7 +29,7 @@ export default function DashboardPage() {
       <div className="dashboard-header">
         <div>
           <h1 className="dashboard-title">Pharmacy Dashboard</h1>
-          <p className="dashboard-subtitle">Overview of medicines, stock, and yearly performance</p>
+          <p className="dashboard-subtitle">Overview of medicines, inventory valuation, and stock ledger movements</p>
         </div>
         <button className="btn btn-primary dashboard-refresh-btn" onClick={loadDashboard}>
           {loading ? "Loading..." : "Refresh"}
@@ -41,9 +41,12 @@ export default function DashboardPage() {
 
       {/* Main Charts & Quick Summary Panel */}
       <div className="dashboard-visuals-row">
-        {/* Yearly Bar Chart */}
+        {/* Stock Ledger Bar Chart */}
         <div className="dashboard-chart-column">
-          <StockBarChart />
+          <StockBarChart
+            data={stats.stockLedgerData || []}
+            loading={loading}
+          />
         </div>
 
         {/* Quick Summary Panel */}

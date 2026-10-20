@@ -8,7 +8,7 @@ namespace PharmacyStockExpiryMonitor.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = "Admin,StoreManager")]
+    [Authorize(Roles = "Admin,StoreManager,Pharmacist")]
     public class IntelligenceController : ControllerBase
     {
         private readonly IIntelligenceService _service;

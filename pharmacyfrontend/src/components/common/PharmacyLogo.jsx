@@ -21,8 +21,8 @@ export default function PharmacyLogo({ width = 72, height = 64, className = "" }
       <rect x="27" y="37" width="26" height="6" rx="3" fill="#ffffff" />
       <defs>
         <linearGradient id="logoGrad" x1="0" y1="0" x2="80" y2="80" gradientUnits="userSpaceOnUse">
-          <stop stopColor="#0f2e59" />
-          <stop offset="1" stopColor="#1e3a8a" />
+          <stop stopColor="#152614" />
+          <stop offset="1" stopColor="#223d20" />
         </linearGradient>
       </defs>
     </svg>
