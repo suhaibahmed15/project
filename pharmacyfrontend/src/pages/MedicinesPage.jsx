@@ -255,7 +255,7 @@ export default function MedicinesPage() {
         isOpen={Boolean(medicineToDelete)}
         title="Delete Medicine"
         message={`Are you sure you want to delete ${medicineToDelete?.name} (${medicineToDelete?.medicineCode})?`}
-        note="Only administrators have permission to delete medicines."
+        
         confirmLabel="Delete Medicine"
         onConfirm={handleDeleteConfirm}
         onClose={() => setMedicineToDelete(null)}

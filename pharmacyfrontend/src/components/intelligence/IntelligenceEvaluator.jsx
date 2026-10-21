@@ -1,4 +1,4 @@
-import { getMedicineLabel, getBadgeClass } from "./intelligenceUtils";
+import { getMedicineLabel, getBadgeClass, getBadgeLabel } from "./intelligenceUtils";
 
 export default function IntelligenceEvaluator({
   medicines,
@@ -93,7 +93,7 @@ export default function IntelligenceEvaluator({
             </div>
 
             <span className={`prediction-type-badge ${getBadgeClass(latestResult.predictionType, latestResult.predictionScore)}`}>
-              {latestResult.predictionType || "Evaluated"}
+              {getBadgeLabel(latestResult.predictionType, latestResult.predictionScore)}
             </span>
           </div>
 

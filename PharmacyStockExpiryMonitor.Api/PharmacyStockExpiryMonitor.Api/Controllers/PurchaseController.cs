@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PharmacyStockExpiryMonitor.Api.DTOs.Purchase;
 using PharmacyStockExpiryMonitor.Api.Services.Interfaces;
@@ -51,6 +51,20 @@ namespace PharmacyStockExpiryMonitor.Api.Controllers
                 nameof(GetById),
                 new { id = purchase.Id },
                 purchase);
+        }
+
+        // DELETE: api/Purchase/5
+        // Deletes a purchase (Admin only).
+        [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var success = await _purchaseService.DeleteAsync(id);
+
+            if (!success)
+                return NotFound(new { message = "Purchase not found." });
+
+            return Ok(new { message = "Purchase deleted successfully." });
         }
     }
 }

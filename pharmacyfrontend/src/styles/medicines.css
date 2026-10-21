@@ -313,38 +313,72 @@
 
 /* Action Buttons */
 .decent-action-btn {
-  padding: 4px 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 6px 12px;
   font-size: 12px;
-  font-weight: 500;
-  border-radius: 4px;
+  font-weight: 600;
+  border-radius: 6px;
   border: 1px solid transparent;
   cursor: pointer;
-  transition: all 0.15s ease;
+  transition: all 0.18s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  line-height: 1;
+  letter-spacing: 0.15px;
+}
+
+.decent-action-btn svg {
+  flex-shrink: 0;
+  transition: transform 0.18s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .decent-action-btn.edit {
   color: #152614;
-  background-color: #e6f7c8;
-  border-color: #c7e997;
-  font-weight: 600;
+  background: linear-gradient(180deg, #f0fdf4 0%, #dcfce7 100%);
+  border-color: #86efac;
 }
 
 .decent-action-btn.edit:hover {
-  background-color: #152614;
+  background: #152614;
   color: #ffffff;
   border-color: #152614;
+  box-shadow: 0 4px 10px rgba(21, 38, 20, 0.25);
+  transform: translateY(-1px);
+}
+
+.decent-action-btn.edit:hover svg {
+  transform: rotate(-10deg) scale(1.1);
+}
+
+.decent-action-btn.edit:active {
+  transform: translateY(0);
+  box-shadow: 0 1px 2px rgba(21, 38, 20, 0.2);
 }
 
 .decent-action-btn.delete {
-  color: #dc2626;
-  background-color: #fef2f2;
-  border-color: #fee2e2;
-  margin-left: 6px;
+  color: #991b1b;
+  background: linear-gradient(180deg, #fff5f5 0%, #fee2e2 100%);
+  border-color: #fca5a5;
+  margin-left: 8px;
 }
 
 .decent-action-btn.delete:hover {
-  background-color: #fee2e2;
-  color: #b91c1c;
+  background: #dc2626;
+  color: #ffffff;
+  border-color: #dc2626;
+  box-shadow: 0 4px 10px rgba(220, 38, 38, 0.25);
+  transform: translateY(-1px);
+}
+
+.decent-action-btn.delete:hover svg {
+  transform: scale(1.1);
+}
+
+.decent-action-btn.delete:active {
+  transform: translateY(0);
+  box-shadow: 0 1px 2px rgba(220, 38, 38, 0.2);
 }
 
 /* Modal */

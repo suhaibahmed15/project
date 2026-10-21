@@ -15,6 +15,7 @@ import NotFoundPage from "./pages/NotFoundPage";
 import ErrorPage from "./pages/ErrorPage";
 import UsersPage from "./pages/UsersPage";
 import StockLedgerPage from "./pages/StockLedgerPage";
+import PurchasesPage from "./pages/PurchasesPage";
 
 export default function App() {
   return (
@@ -34,7 +35,8 @@ export default function App() {
               <Route path="/alerts" element={<AlertsPage />} />
               <Route path="/transactions" element={<StockLedgerPage />} />
               <Route path="/ledger" element={<StockLedgerPage />} />
-              <Route path="/purchases" element={<DashboardPage />} />
+              <Route path="/purchases" element={<PurchasesPage />} />
+              <Route path="/purchase" element={<PurchasesPage />} />
               <Route path="/categories" element={<DashboardPage />} />
               <Route path="/suppliers" element={<DashboardPage />} />
               <Route path="/intelligence" element={<IntelligencePage />} />

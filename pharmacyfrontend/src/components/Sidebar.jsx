@@ -98,7 +98,7 @@ const NAV_ITEMS = [
     )
   },
   {
-    label: "User Management",
+    label: "User",
     path: "/users",
     adminOnly: true,
     icon: (

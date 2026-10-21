@@ -79,7 +79,8 @@ export const suppliersApi = {
 export const purchasesApi = {
   getAll: (params) => client.get("/Purchase", { params }),
   getById: (id) => client.get(`/Purchase/${id}`),
-  create: (data) => client.post("/Purchase", data)
+  create: (data) => client.post("/Purchase", data),
+  delete: (id) => client.delete(`/Purchase/${id}`)
 };
 
 // Stock Transactions endpoints

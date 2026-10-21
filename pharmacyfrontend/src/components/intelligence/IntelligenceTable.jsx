@@ -1,6 +1,12 @@
 import { useState, useMemo } from "react";
 import Pagination from "../common/Pagination";
-import { getMedicineLabel, getBadgeClass, getScoreFillClass } from "./intelligenceUtils";
+import {
+  getMedicineLabel,
+  getBadgeClass,
+  getBadgeLabel,
+  getScoreFillClass,
+  getRiskLevel
+} from "./intelligenceUtils";
 
 export default function IntelligenceTable({
   predictions = [],
@@ -16,10 +22,8 @@ export default function IntelligenceTable({
   const filteredPredictions = useMemo(() => {
     return predictions.filter((item) => {
       if (riskFilter !== "all") {
-        const type = (item.predictionType || "").toLowerCase();
-        if (riskFilter === "high" && !type.includes("high") && !type.includes("stock-out")) return false;
-        if (riskFilter === "medium" && !type.includes("medium")) return false;
-        if (riskFilter === "low" && !type.includes("low")) return false;
+        const itemLevel = getRiskLevel(item.predictionScore, item.predictionType);
+        if (itemLevel !== riskFilter) return false;
       }
 
       if (searchQuery.trim()) {
@@ -27,7 +31,8 @@ export default function IntelligenceTable({
         const medName = getMedicineLabel(medicines, item.medicineId).toLowerCase();
         const explanation = (item.explanation || "").toLowerCase();
         const type = (item.predictionType || "").toLowerCase();
-        return medName.includes(q) || explanation.includes(q) || type.includes(q);
+        const label = getBadgeLabel(item.predictionType, item.predictionScore).toLowerCase();
+        return medName.includes(q) || explanation.includes(q) || type.includes(q) || label.includes(q);
       }
 
       return true;
@@ -69,21 +74,21 @@ export default function IntelligenceTable({
             className={`filter-chip-btn ${riskFilter === "high" ? "active" : ""}`}
             onClick={() => handleFilterClick("high")}
           >
-            High Risk ({predictions.filter((p) => p.predictionScore >= 0.7).length})
+            High Risk ({predictions.filter((p) => getRiskLevel(p.predictionScore, p.predictionType) === "high").length})
           </button>
           <button
             type="button"
             className={`filter-chip-btn ${riskFilter === "medium" ? "active" : ""}`}
             onClick={() => handleFilterClick("medium")}
           >
-            Medium Risk ({predictions.filter((p) => p.predictionScore >= 0.4 && p.predictionScore < 0.7).length})
+            Medium Risk ({predictions.filter((p) => getRiskLevel(p.predictionScore, p.predictionType) === "medium").length})
           </button>
           <button
             type="button"
             className={`filter-chip-btn ${riskFilter === "low" ? "active" : ""}`}
             onClick={() => handleFilterClick("low")}
           >
-            Low Risk ({predictions.filter((p) => p.predictionScore < 0.4).length})
+            Low Risk ({predictions.filter((p) => getRiskLevel(p.predictionScore, p.predictionType) === "low").length})
           </button>
         </div>
 
@@ -172,7 +177,7 @@ export default function IntelligenceTable({
                     </td>
                     <td>
                       <span className={`prediction-type-badge ${getBadgeClass(pred.predictionType, pred.predictionScore)}`}>
-                        {pred.predictionType || "Evaluated"}
+                        {getBadgeLabel(pred.predictionType, pred.predictionScore)}
                       </span>
                     </td>
                     <td style={{ maxWidth: "250px" }}>

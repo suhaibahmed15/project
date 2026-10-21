@@ -755,17 +755,32 @@
 }
 
 .topbar-logout-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
   background-color: #152614;
   color: #ffffff;
   border: 1px solid #152614;
   padding: 6px 14px;
-  border-radius: var(--radius-sm, 4px);
+  border-radius: var(--radius-sm, 6px);
   font-size: 12px;
   font-weight: 600;
+  line-height: 1;
   cursor: pointer;
   transition: all var(--transition-fast, 150ms);
   white-space: nowrap;
   flex-shrink: 0;
+}
+
+.topbar-logout-btn svg {
+  display: block;
+  flex-shrink: 0;
+}
+
+.topbar-logout-text {
+  display: inline-block;
+  line-height: 1;
 }
 
 .topbar-logout-btn:hover {

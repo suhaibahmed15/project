@@ -1,11 +1,10 @@
+import { getRiskLevel } from "./intelligenceUtils";
+
 export default function IntelligenceStatsCards({ predictions = [] }) {
   const totalEvaluations = predictions.length;
   
   const highRiskCount = predictions.filter(
-    (p) =>
-      p.predictionType?.toLowerCase().includes("high") ||
-      p.predictionType?.toLowerCase().includes("stock-out") ||
-      p.predictionScore >= 0.7
+    (p) => getRiskLevel(p.predictionScore, p.predictionType) === "high"
   ).length;
 
   const validConsumptions = predictions.filter((p) => p.averageDailyConsumption > 0);

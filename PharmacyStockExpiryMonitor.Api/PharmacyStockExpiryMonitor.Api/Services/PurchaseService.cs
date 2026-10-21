@@ -32,6 +32,8 @@ namespace PharmacyStockExpiryMonitor.Api.Services
                     .Select(item => new PurchaseItemDto
                     {
                         MedicineId = item.MedicineId,
+                        MedicineName = item.Medicine?.Name,
+                        MedicineCode = item.Medicine?.MedicineCode,
                         Quantity = item.Quantity,
                         UnitPrice = item.UnitPrice
                     })
@@ -158,6 +160,8 @@ namespace PharmacyStockExpiryMonitor.Api.Services
                     .Select(item => new PurchaseItemDto
                     {
                         MedicineId = item.MedicineId,
+                        MedicineName = item.Medicine?.Name,
+                        MedicineCode = item.Medicine?.MedicineCode,
                         Quantity = item.Quantity,
                         UnitPrice = item.UnitPrice
                     })

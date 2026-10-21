@@ -401,7 +401,7 @@ export default function BatchesPage() {
         isOpen={Boolean(batchToDelete)}
         title="Delete Batch"
         message={`Are you sure you want to delete batch "${batchToDelete?.batchNumber}" for ${batchToDelete?.medicineName || "medicine"}?`}
-        note="This will soft-delete the batch record. Only administrators have permission to delete batches."
+        
         confirmLabel="Delete Batch"
         onConfirm={handleDeleteConfirm}
         onClose={() => setBatchToDelete(null)}
