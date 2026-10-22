@@ -28,6 +28,7 @@ namespace PharmacyStockExpiryMonitor.Api.Services
             string? newValues = null)
         {
             var httpContext = _httpContextAccessor.HttpContext;
+            int? parsedEntityId = int.TryParse(entityId, out var parsedId) ? parsedId : null;
 
             var auditLog = new AuditLog
             {
@@ -35,7 +36,13 @@ namespace PharmacyStockExpiryMonitor.Api.Services
                     httpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier),
                     out var parsedUserId)
                         ? parsedUserId
-                        : null,
+                        : (entityName.Equals("User", StringComparison.OrdinalIgnoreCase) ? parsedEntityId : null),
+
+                MedicineId = entityName.Equals("Medicine", StringComparison.OrdinalIgnoreCase) ? parsedEntityId : null,
+                BatchId = entityName.Equals("Batch", StringComparison.OrdinalIgnoreCase) ? parsedEntityId : null,
+                PurchaseId = entityName.Equals("Purchase", StringComparison.OrdinalIgnoreCase) ? parsedEntityId : null,
+                SupplierId = entityName.Equals("Supplier", StringComparison.OrdinalIgnoreCase) ? parsedEntityId : null,
+                CategoryId = entityName.Equals("Category", StringComparison.OrdinalIgnoreCase) ? parsedEntityId : null,
 
                 Action = action,
                 EntityName = entityName,

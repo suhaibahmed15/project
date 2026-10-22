@@ -13,7 +13,8 @@ namespace PharmacyStockExpiryMonitor.Api.DTOs.User
         public bool IsActive { get; set; }
 
         public int? RoleId { get; set; }
-
+        public DateTime? LastLoginAt { get; set; }
+        public string? CreatedBy { get; set; }
         public DateTime CreatedAt { get; set; }
     }
 }

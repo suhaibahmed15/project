@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using PharmacyStockExpiryMonitor.Api.Data;
 using PharmacyStockExpiryMonitor.Api.DTOs.Auth;
 using PharmacyStockExpiryMonitor.Api.Entities;
 using PharmacyStockExpiryMonitor.Api.Services.Interfaces;
@@ -15,15 +16,21 @@ namespace PharmacyStockExpiryMonitor.Api.Services
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<IdentityRole<int>> _roleManager;
         private readonly IConfiguration _configuration;
+        private readonly IAuditLogService _auditLogService;
+        private readonly ApplicationDbContext _context;
 
         public AuthService(
             UserManager<ApplicationUser> userManager,
             RoleManager<IdentityRole<int>> roleManager,
-            IConfiguration configuration)
+            IConfiguration configuration,
+            IAuditLogService auditLogService,
+            ApplicationDbContext context)
         {
             _userManager = userManager;
             _roleManager = roleManager;
             _configuration = configuration;
+            _auditLogService = auditLogService;
+            _context = context;
         }
 
         public async Task<LoginResponseDto?> LoginAsync(
@@ -46,6 +53,9 @@ namespace PharmacyStockExpiryMonitor.Api.Services
             if (!passwordValid)
                 return null;
 
+            user.LastLoginAt = DateTime.UtcNow;
+            await _context.SaveChangesAsync();
+
             int roleId = user.RoleId ?? 1;
             if (user.RoleId == null)
             {
@@ -62,6 +72,13 @@ namespace PharmacyStockExpiryMonitor.Api.Services
             }
 
             var token = await GenerateTokenAsync(user, roleId);
+
+            await _auditLogService.LogAsync(
+                "LOGIN",
+                "User",
+                user.Id.ToString(),
+                null,
+                $"User {user.Email} successfully logged in.");
 
             return new LoginResponseDto
             {

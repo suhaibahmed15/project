@@ -109,14 +109,14 @@ namespace PharmacyStockExpiryMonitor.Api.Controllers
             int id,
             UpdateSupplierDto dto)
         {
-            var username = User.FindFirstValue(ClaimTypes.Name) ?? "SYSTEM";
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier) ?? "System";
             try
             {
                 var supplier =
                     await _supplierService.UpdateAsync(
                         id,
                         dto,
-                        username);
+                        userId);
 
                 if (!supplier)
                 {

@@ -1,10 +1,12 @@
 
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using PharmacyStockExpiryMonitor.Api.Data;
 using PharmacyStockExpiryMonitor.Api.DTOs.User;
 using PharmacyStockExpiryMonitor.Api.Entities;
 using PharmacyStockExpiryMonitor.Api.Services.Interfaces;
+using System.Security.Claims;
 
 namespace PharmacyStockExpiryMonitor.Api.Services
 {
@@ -13,15 +15,21 @@ namespace PharmacyStockExpiryMonitor.Api.Services
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<IdentityRole<int>> _roleManager;
         private readonly ApplicationDbContext _context;
+        private readonly IAuditLogService _auditLogService;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
         public UserService(
             UserManager<ApplicationUser> userManager,
             RoleManager<IdentityRole<int>> roleManager,
-            ApplicationDbContext context)
+            ApplicationDbContext context,
+            IAuditLogService auditLogService,
+            IHttpContextAccessor httpContextAccessor)
         {
             _userManager = userManager;
             _roleManager = roleManager;
             _context = context;
+            _auditLogService = auditLogService;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         // Get all users that have not been deleted.
@@ -44,6 +52,8 @@ namespace PharmacyStockExpiryMonitor.Api.Services
                     PhoneNumber = user.PhoneNumber,
                     IsActive = user.IsActive,
                     RoleId = user.RoleId,
+                    LastLoginAt = user.LastLoginAt,
+                    CreatedBy = user.CreatedBy,
                     CreatedAt = user.CreatedAt
                 });
             }
@@ -71,6 +81,8 @@ namespace PharmacyStockExpiryMonitor.Api.Services
                 PhoneNumber = user.PhoneNumber,
                 IsActive = user.IsActive,
                 RoleId = user.RoleId,
+                LastLoginAt = user.LastLoginAt,
+                CreatedBy = user.CreatedBy,
                 CreatedAt = user.CreatedAt
             };
         }
@@ -123,6 +135,7 @@ namespace PharmacyStockExpiryMonitor.Api.Services
                 IsDeleted = false,
                 SecurityStamp = Guid.NewGuid().ToString(),
                 ConcurrencyStamp = Guid.NewGuid().ToString(),
+                CreatedBy = _httpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "System",
                 CreatedAt = DateTime.UtcNow
             };
 
@@ -163,6 +176,19 @@ namespace PharmacyStockExpiryMonitor.Api.Services
 
                 throw new InvalidOperationException(errors);
             }
+
+            await _auditLogService.LogJsonAsync(
+                "CREATE",
+                "User",
+                user.Id.ToString(),
+                null,
+                new
+                {
+                    user.Id,
+                    user.FullName,
+                    user.Email,
+                    Role = role.Name
+                });
 
             return new UserDto
             {
@@ -253,11 +279,21 @@ namespace PharmacyStockExpiryMonitor.Api.Services
                 throw new InvalidOperationException(errors);
             }
 
+            var oldRoleId = user.RoleId;
+
             // Keep the custom integer RoleId in sync.
             user.RoleId = dto.RoleId;
             user.UpdatedAt = DateTime.UtcNow;
+            user.UpdatedBy = _httpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "System";
 
             await _context.SaveChangesAsync();
+
+            await _auditLogService.LogJsonAsync(
+                "ASSIGN_ROLE",
+                "User",
+                user.Id.ToString(),
+                new { RoleId = oldRoleId, Roles = existingRoles },
+                new { RoleId = dto.RoleId, Role = role.Name });
 
             return true;
         }
@@ -275,8 +311,16 @@ namespace PharmacyStockExpiryMonitor.Api.Services
             user.IsDeleted = true;
             user.IsActive = false;
             user.UpdatedAt = DateTime.UtcNow;
+            user.UpdatedBy = _httpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "System";
 
             await _context.SaveChangesAsync();
+
+            await _auditLogService.LogJsonAsync(
+                "DELETE",
+                "User",
+                user.Id.ToString(),
+                new { user.Id, user.FullName, user.Email, user.IsActive, user.IsDeleted },
+                new { user.Id, user.FullName, user.Email, IsActive = false, IsDeleted = true });
 
             return true;
         }

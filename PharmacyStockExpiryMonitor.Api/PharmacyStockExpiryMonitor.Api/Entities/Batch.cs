@@ -45,4 +45,7 @@ public class Batch : IAuditableEntity
 
     public ICollection<Alert> Alerts { get; set; }
         = new List<Alert>();
+
+    public ICollection<AuditLog> AuditLogs { get; set; }
+        = new List<AuditLog>();
 }

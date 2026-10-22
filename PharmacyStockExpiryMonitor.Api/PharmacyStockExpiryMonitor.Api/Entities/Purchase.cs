@@ -37,4 +37,7 @@ public class Purchase : IAuditableEntity
 
     public ICollection<PurchaseItem> PurchaseItems { get; set; }
         = new List<PurchaseItem>();
+
+    public ICollection<AuditLog> AuditLogs { get; set; }
+        = new List<AuditLog>();
 }

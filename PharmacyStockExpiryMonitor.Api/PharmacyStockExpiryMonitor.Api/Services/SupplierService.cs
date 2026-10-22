@@ -160,6 +160,17 @@ namespace PharmacyStockExpiryMonitor.Api.Services
             if (supplier == null)
                 return false;
 
+            var oldValues = new
+            {
+                supplier.Id,
+                supplier.Name,
+                supplier.ContactPerson,
+                supplier.Phone,
+                supplier.Email,
+                supplier.Address,
+                supplier.IsActive
+            };
+
             supplier.Name = dto.Name.Trim();
             supplier.ContactPerson = dto.ContactPerson?.Trim();
             supplier.Phone = dto.Phone?.Trim();
@@ -171,21 +182,21 @@ namespace PharmacyStockExpiryMonitor.Api.Services
 
             await _repository.UpdateAsync(supplier);
 
-            //await _auditLogService.LogJsonAsync(
-            //    "UPDATE",
-            //    "Supplier",
-            //    supplier.Id.ToString(),
-            //    oldValues,
-            //    new
-            //    {
-            //        supplier.Id,
-            //        supplier.Name,
-            //        supplier.ContactPerson,
-            //        supplier.Phone,
-            //        supplier.Email,
-            //        supplier.Address,
-            //        supplier.IsActive
-            //    });
+            await _auditLogService.LogJsonAsync(
+                "UPDATE",
+                "Supplier",
+                supplier.Id.ToString(),
+                oldValues,
+                new
+                {
+                    supplier.Id,
+                    supplier.Name,
+                    supplier.ContactPerson,
+                    supplier.Phone,
+                    supplier.Email,
+                    supplier.Address,
+                    supplier.IsActive
+                });
 
             return true;
         }

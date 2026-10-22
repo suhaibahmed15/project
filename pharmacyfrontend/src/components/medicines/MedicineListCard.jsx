@@ -46,15 +46,6 @@ export default function MedicineListCard({
             <th>Category</th>
 
             <SortableTh
-              column="stock"
-              currentSortBy={sortBy}
-              currentSortDirection={sortDirection}
-              onSort={onSort}
-            >
-              Stock
-            </SortableTh>
-
-            <SortableTh
               column="reorderlevel"
               currentSortBy={sortBy}
               currentSortDirection={sortDirection}
@@ -70,21 +61,18 @@ export default function MedicineListCard({
         <tbody>
           {loading ? (
             <tr>
-              <td colSpan="8" className="decent-loading-cell">
+              <td colSpan="7" className="decent-loading-cell">
                 Loading medicines...
               </td>
             </tr>
           ) : medicines.length === 0 ? (
             <tr>
-              <td colSpan="8" className="decent-empty-cell">
+              <td colSpan="7" className="decent-empty-cell">
                 No medicines found.
               </td>
             </tr>
           ) : (
             medicines.map((med) => {
-              const isOut = med.currentStock <= 0;
-              const isLow = !isOut && med.currentStock <= med.reorderLevel;
-
               return (
                 <tr key={med.id}>
                   <td>
@@ -93,15 +81,6 @@ export default function MedicineListCard({
                   <td className="decent-name">{med.name}</td>
                   <td className="decent-muted">{med.genericName || "—"}</td>
                   <td>{med.categoryName || "—"}</td>
-                  <td>
-                    <span
-                      className={`decent-stock ${
-                        isOut ? "out" : isLow ? "low" : "ok"
-                      }`}
-                    >
-                      {med.currentStock}
-                    </span>
-                  </td>
                   <td className="decent-muted">{med.reorderLevel}</td>
                   <td>
                     <span

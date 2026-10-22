@@ -39,6 +39,12 @@ namespace PharmacyStockExpiryMonitor.Api.Data
 
         public DbSet<AuditLog> AuditLogs { get; set; }
 
+        protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
+        {
+            base.ConfigureConventions(configurationBuilder);
+            configurationBuilder.Properties<bool>().HaveConversion<int>();
+        }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -60,6 +66,14 @@ namespace PharmacyStockExpiryMonitor.Api.Data
                 b.Ignore(u => u.EmailConfirmed);
                 b.Ignore(u => u.AccessFailedCount);
             });
+
+            // =========================
+            // Ignore Unused Identity Tables
+            // =========================
+            modelBuilder.Ignore<IdentityUserClaim<int>>();
+            modelBuilder.Ignore<IdentityRoleClaim<int>>();
+            modelBuilder.Ignore<IdentityUserLogin<int>>();
+            modelBuilder.Ignore<IdentityUserToken<int>>();
 
             // =========================
             // Category
@@ -388,6 +402,21 @@ namespace PharmacyStockExpiryMonitor.Api.Data
                 .HasIndex(x => x.UserId);
 
             modelBuilder.Entity<AuditLog>()
+                .HasIndex(x => x.MedicineId);
+
+            modelBuilder.Entity<AuditLog>()
+                .HasIndex(x => x.BatchId);
+
+            modelBuilder.Entity<AuditLog>()
+                .HasIndex(x => x.PurchaseId);
+
+            modelBuilder.Entity<AuditLog>()
+                .HasIndex(x => x.SupplierId);
+
+            modelBuilder.Entity<AuditLog>()
+                .HasIndex(x => x.CategoryId);
+
+            modelBuilder.Entity<AuditLog>()
                 .Property(x => x.Action)
                 .HasMaxLength(100)
                 .IsRequired();
@@ -417,6 +446,36 @@ namespace PharmacyStockExpiryMonitor.Api.Data
                 .HasOne(x => x.User)
                 .WithMany(x => x.AuditLogs)
                 .HasForeignKey(x => x.UserId)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            modelBuilder.Entity<AuditLog>()
+                .HasOne(x => x.Medicine)
+                .WithMany(x => x.AuditLogs)
+                .HasForeignKey(x => x.MedicineId)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            modelBuilder.Entity<AuditLog>()
+                .HasOne(x => x.Batch)
+                .WithMany(x => x.AuditLogs)
+                .HasForeignKey(x => x.BatchId)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            modelBuilder.Entity<AuditLog>()
+                .HasOne(x => x.Purchase)
+                .WithMany(x => x.AuditLogs)
+                .HasForeignKey(x => x.PurchaseId)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            modelBuilder.Entity<AuditLog>()
+                .HasOne(x => x.Supplier)
+                .WithMany(x => x.AuditLogs)
+                .HasForeignKey(x => x.SupplierId)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            modelBuilder.Entity<AuditLog>()
+                .HasOne(x => x.Category)
+                .WithMany(x => x.AuditLogs)
+                .HasForeignKey(x => x.CategoryId)
                 .OnDelete(DeleteBehavior.SetNull);
         }
 
@@ -469,11 +528,11 @@ namespace PharmacyStockExpiryMonitor.Api.Data
                 return "System";
             }
 
-            // Return only the role (e.g., Admin, Pharmacist, StoreManager)
-            var role = user.FindFirst(ClaimTypes.Role)?.Value;
-            if (!string.IsNullOrEmpty(role))
+            // Return User ID (ClaimTypes.NameIdentifier)
+            var id = user.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (!string.IsNullOrEmpty(id))
             {
-                return role;
+                return id;
             }
 
             var email = user.FindFirst(ClaimTypes.Email)?.Value;
@@ -488,10 +547,10 @@ namespace PharmacyStockExpiryMonitor.Api.Data
                 return name;
             }
 
-            var id = user.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            if (!string.IsNullOrEmpty(id))
+            var role = user.FindFirst(ClaimTypes.Role)?.Value;
+            if (!string.IsNullOrEmpty(role))
             {
-                return id;
+                return role;
             }
 
             return "System";

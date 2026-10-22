@@ -61,6 +61,9 @@ public class Medicine : IAuditableEntity
     public ICollection<PredictionResult> PredictionResults { get; set; }
         = new List<PredictionResult>();
 
+    public ICollection<AuditLog> AuditLogs { get; set; }
+        = new List<AuditLog>();
+
     [NotMapped]
     public int CurrentStock
     {

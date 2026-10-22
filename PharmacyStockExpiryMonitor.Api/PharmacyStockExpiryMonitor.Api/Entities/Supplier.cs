@@ -40,4 +40,7 @@ public class Supplier : IAuditableEntity
 
     public ICollection<Purchase> Purchases { get; set; }
         = new List<Purchase>();
+
+    public ICollection<AuditLog> AuditLogs { get; set; }
+        = new List<AuditLog>();
 }

@@ -8,10 +8,14 @@ namespace PharmacyStockExpiryMonitor.Api.Services
     public class PurchaseService : IPurchaseService
     {
         private readonly IPurchaseRepository _repository;
+        private readonly IAuditLogService _auditLogService;
 
-        public PurchaseService(IPurchaseRepository repository)
+        public PurchaseService(
+            IPurchaseRepository repository,
+            IAuditLogService auditLogService)
         {
             _repository = repository;
+            _auditLogService = auditLogService;
         }
 
         public async Task<List<PurchaseDto>> GetAllAsync()
@@ -126,6 +130,20 @@ namespace PharmacyStockExpiryMonitor.Api.Services
             var createdPurchase =
                 await _repository.AddAsync(purchase);
 
+            await _auditLogService.LogJsonAsync(
+                "CREATE",
+                "Purchase",
+                createdPurchase.Id.ToString(),
+                null,
+                new
+                {
+                    createdPurchase.Id,
+                    createdPurchase.PurchaseNumber,
+                    createdPurchase.SupplierId,
+                    createdPurchase.TotalAmount,
+                    ItemCount = createdPurchase.PurchaseItems.Count
+                });
+
             return ToDto(createdPurchase);
         }
 
@@ -140,6 +158,13 @@ namespace PharmacyStockExpiryMonitor.Api.Services
             purchase.UpdatedAt = DateTime.UtcNow;
 
             await _repository.UpdateAsync(purchase);
+
+            await _auditLogService.LogJsonAsync(
+                "DELETE",
+                "Purchase",
+                purchase.Id.ToString(),
+                new { purchase.Id, purchase.PurchaseNumber, purchase.TotalAmount },
+                null);
 
             return true;
         }

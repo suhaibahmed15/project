@@ -29,4 +29,7 @@ public class Category : IAuditableEntity
 
     public ICollection<Medicine> Medicines { get; set; }
         = new List<Medicine>();
+
+    public ICollection<AuditLog> AuditLogs { get; set; }
+        = new List<AuditLog>();
 }

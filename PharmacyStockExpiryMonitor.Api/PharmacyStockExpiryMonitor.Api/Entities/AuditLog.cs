@@ -7,6 +7,22 @@ public class AuditLog
     public int Id { get; set; }
 
     public int? UserId { get; set; }
+    public ApplicationUser? User { get; set; }
+
+    public int? MedicineId { get; set; }
+    public Medicine? Medicine { get; set; }
+
+    public int? BatchId { get; set; }
+    public Batch? Batch { get; set; }
+
+    public int? PurchaseId { get; set; }
+    public Purchase? Purchase { get; set; }
+
+    public int? SupplierId { get; set; }
+    public Supplier? Supplier { get; set; }
+
+    public int? CategoryId { get; set; }
+    public Category? Category { get; set; }
 
     [Required]
     [StringLength(100)]
@@ -29,6 +45,4 @@ public class AuditLog
     public string? IpAddress { get; set; }
 
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-
-    public ApplicationUser? User { get; set; }
 }

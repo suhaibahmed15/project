@@ -15,6 +15,14 @@ public class ApplicationUser : IdentityUser<int>
 
     public DateTime? UpdatedAt { get; set; }
 
+    [StringLength(250)]
+    public string? CreatedBy { get; set; }
+
+    [StringLength(250)]
+    public string? UpdatedBy { get; set; }
+
+    public DateTime? LastLoginAt { get; set; }
+
     public bool IsDeleted { get; set; } = false;
 
     public int? RoleId { get; set; }
