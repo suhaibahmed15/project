@@ -22,6 +22,7 @@ export default function LedgerTable({
   transactions = [],
   medicines = [],
   batches = [],
+  users = [],
   loading = false,
   sortBy,
   sortDirection,
@@ -33,6 +34,25 @@ export default function LedgerTable({
   onPageChange,
   onPageSizeChange
 }) {
+  const getUserInfo = (userId, createdByName, userFullName) => {
+    if (createdByName && isNaN(Number(createdByName))) return createdByName;
+    if (userFullName && isNaN(Number(userFullName))) return userFullName;
+    if (!userId) return "System";
+
+    const user = users.find((u) => String(u.id) === String(userId));
+    if (user && user.fullName) return user.fullName;
+    if (user && user.name) return user.name;
+    if (user && user.userName) return user.userName;
+
+    if (String(userId) === "1") return "System Administrator";
+    if (String(userId) === "2") return "Store Manager";
+    if (String(userId) === "3") return "Lead Pharmacist";
+
+    if (isNaN(Number(userId))) return userId;
+
+    return createdByName || userFullName || `User #${userId}`;
+  };
+
   const getMedicineInfo = (medId) => {
     const med = medicines.find((m) => m.id === medId);
     return med ? `${med.name} (${med.medicineCode})` : `Medicine #${medId}`;
@@ -178,7 +198,7 @@ export default function LedgerTable({
                     <td style={{ whiteSpace: "nowrap" }}>
                       <div style={{ display: "flex", flexDirection: "column", gap: "2px" }}>
                         <span style={{ fontSize: "12px", color: "#0f172a", fontWeight: 500 }}>
-                          {t.createdBy || "System"}
+                          {getUserInfo(t.createdBy, t.createdByName, t.userFullName)}
                         </span>
                         {t.isAdminOverride && (
                           <span

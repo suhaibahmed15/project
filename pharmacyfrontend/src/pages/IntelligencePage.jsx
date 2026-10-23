@@ -92,15 +92,15 @@ export default function IntelligencePage() {
   return (
     <div className="intelligence-container">
       <div className="intelligence-header">
-        <div className="intelligence-header-left">
-          <div className="intelligence-badge-row">
-            <span className="ai-pill-tag">AI Intelligence</span>
-            <span className="role-access-pill">Role: {roleName} Authorized</span>
-          </div>
-          <h1 className="intelligence-title">AI Stock & Expiry Intelligence</h1>
+        <div>
+          <h1 className="intelligence-title">AI Stock &amp; Expiry Intelligence</h1>
           <p className="intelligence-subtitle">
             Predictive stock-out forecasting, consumption burn rate modeling, and automated inventory depletion analytics.
           </p>
+        </div>
+        <div className="intelligence-header-actions">
+          <span className="ai-pill-tag">AI Intelligence</span>
+          <span className="role-access-pill">Role: {roleName} Authorized</span>
         </div>
       </div>
 

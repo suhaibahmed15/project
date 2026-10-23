@@ -216,6 +216,12 @@ namespace PharmacyStockExpiryMonitor.Api.Services
                 return false;
             }
 
+            // Ensure SecurityStamp is never null or empty
+            if (string.IsNullOrWhiteSpace(user.SecurityStamp))
+            {
+                user.SecurityStamp = Guid.NewGuid().ToString("N");
+            }
+
             // Find the requested role by its integer ID.
             var role = await _roleManager.FindByIdAsync(
                 dto.RoleId.ToString()

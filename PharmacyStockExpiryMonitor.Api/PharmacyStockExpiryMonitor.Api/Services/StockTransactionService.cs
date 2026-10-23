@@ -1,3 +1,5 @@
+using Microsoft.EntityFrameworkCore;
+using PharmacyStockExpiryMonitor.Api.Data;
 using PharmacyStockExpiryMonitor.Api.DTOs.StockTransaction;
 using PharmacyStockExpiryMonitor.Api.Entities;
 using PharmacyStockExpiryMonitor.Api.Enums;
@@ -11,13 +13,62 @@ namespace PharmacyStockExpiryMonitor.Api.Services
     {
         private readonly IStockTransactionRepository _repository;
         private readonly IBatchRepository _batchRepository;
+        private readonly ApplicationDbContext _context;
 
         public StockTransactionService(
             IStockTransactionRepository repository,
-            IBatchRepository batchRepository)
+            IBatchRepository batchRepository,
+            ApplicationDbContext context)
         {
             _repository = repository;
             _batchRepository = batchRepository;
+            _context = context;
+        }
+
+        private async Task<Dictionary<string, string>> GetUserFullNameMapAsync()
+        {
+            try
+            {
+                var users = await _context.Users
+                    .AsNoTracking()
+                    .Select(u => new { u.Id, u.FullName, u.UserName })
+                    .ToListAsync();
+
+                var map = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+                foreach (var u in users)
+                {
+                    var displayName = !string.IsNullOrWhiteSpace(u.FullName)
+                        ? u.FullName
+                        : (!string.IsNullOrWhiteSpace(u.UserName) ? u.UserName : $"User #{u.Id}");
+
+                    map[u.Id.ToString()] = displayName;
+
+                    if (!string.IsNullOrWhiteSpace(u.UserName) && !map.ContainsKey(u.UserName))
+                    {
+                        map[u.UserName] = displayName;
+                    }
+                }
+                return map;
+            }
+            catch
+            {
+                return new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+            }
+        }
+
+        private static string ResolveUserFullName(string? createdBy, Dictionary<string, string> userMap)
+        {
+            if (string.IsNullOrWhiteSpace(createdBy))
+                return "System";
+
+            if (userMap.TryGetValue(createdBy, out var fullName))
+                return fullName;
+
+            if (createdBy == "1") return "System Administrator";
+            if (createdBy == "2") return "Store Manager";
+            if (createdBy == "3") return "Lead Pharmacist";
+
+            return createdBy;
         }
 
         public async Task<List<StockTransactionDto>> GetAllAsync()
@@ -25,8 +76,13 @@ namespace PharmacyStockExpiryMonitor.Api.Services
             var transactions =
                 await _repository.GetAllAsync();
 
+            var userMap = await GetUserFullNameMapAsync();
+
             return transactions.Select(transaction =>
-                new StockTransactionDto
+            {
+                var userFullName = ResolveUserFullName(transaction.CreatedBy, userMap);
+
+                return new StockTransactionDto
                 {
                     Id = transaction.Id,
                     MedicineId = transaction.MedicineId,
@@ -43,9 +99,12 @@ namespace PharmacyStockExpiryMonitor.Api.Services
                         transaction.IsAdminOverride,
                     CreatedAt = transaction.CreatedAt,
                     CreatedBy = transaction.CreatedBy,
+                    CreatedByName = userFullName,
+                    UserFullName = userFullName,
                     UpdatedAt = transaction.UpdatedAt,
                     UpdatedBy = transaction.UpdatedBy
-                }).ToList();
+                };
+            }).ToList();
         }
 
         public async Task<StockTransactionDto?> GetByIdAsync(
@@ -56,6 +115,9 @@ namespace PharmacyStockExpiryMonitor.Api.Services
 
             if (transaction == null)
                 return null;
+
+            var userMap = await GetUserFullNameMapAsync();
+            var userFullName = ResolveUserFullName(transaction.CreatedBy, userMap);
 
             return new StockTransactionDto
             {
@@ -74,6 +136,8 @@ namespace PharmacyStockExpiryMonitor.Api.Services
                     transaction.IsAdminOverride,
                 CreatedAt = transaction.CreatedAt,
                 CreatedBy = transaction.CreatedBy,
+                CreatedByName = userFullName,
+                UserFullName = userFullName,
                 UpdatedAt = transaction.UpdatedAt,
                 UpdatedBy = transaction.UpdatedBy
             };
@@ -148,6 +212,9 @@ namespace PharmacyStockExpiryMonitor.Api.Services
             var createdTransaction =
                 await _repository.AddAsync(transaction);
 
+            var userMap = await GetUserFullNameMapAsync();
+            var userFullName = ResolveUserFullName(createdTransaction.CreatedBy, userMap);
+
             return new StockTransactionDto
             {
                 Id = createdTransaction.Id,
@@ -171,6 +238,10 @@ namespace PharmacyStockExpiryMonitor.Api.Services
                     createdTransaction.CreatedAt,
                 CreatedBy =
                     createdTransaction.CreatedBy,
+                CreatedByName =
+                    userFullName,
+                UserFullName =
+                    userFullName,
                 UpdatedAt =
                     createdTransaction.UpdatedAt,
                 UpdatedBy =

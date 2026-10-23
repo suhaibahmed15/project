@@ -7,22 +7,26 @@
   flex-direction: column;
   gap: 20px;
   width: 100%;
-  max-width: 1300px;
+  max-width: 1320px;
   margin: 0 auto;
+  box-sizing: border-box;
 }
 
 /* Page Header */
 .batches-header {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: space-between;
   flex-wrap: wrap;
   gap: 16px;
   background-color: #FFFFFF;
   padding: 20px 24px;
+  min-height: 84px;
+  box-sizing: border-box;
   border-radius: var(--radius-lg, 12px);
   border: 1px solid var(--color-border, #E2E8F0);
   box-shadow: var(--shadow-sm, 0 1px 2px rgba(0, 0, 0, 0.04));
+  width: 100%;
 }
 
 .batches-title {

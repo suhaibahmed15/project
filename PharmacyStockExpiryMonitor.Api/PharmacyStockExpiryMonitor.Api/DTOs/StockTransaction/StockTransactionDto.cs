@@ -26,6 +26,10 @@ namespace PharmacyStockExpiryMonitor.Api.DTOs.StockTransaction
 
         public string? CreatedBy { get; set; }
 
+        public string? CreatedByName { get; set; }
+
+        public string? UserFullName { get; set; }
+
         public DateTime? UpdatedAt { get; set; }
 
         public string? UpdatedBy { get; set; }

@@ -175,8 +175,8 @@ export default function PurchasesPage() {
     setDeleting(true);
     try {
       await purchasesApi.delete(purchaseToDelete.id);
-      setFeedback(`Purchase order "${purchaseToDelete.purchaseNumber}" deleted successfully.`);
-      setTimeout(() => setFeedback(""), 4500);
+      setFeedback(`Purchase order "${purchaseToDelete.purchaseNumber}" deleted.`);
+      setTimeout(() => setFeedback(""), 3500);
       setPurchaseToDelete(null);
       fetchPurchases();
     } catch (err) {
@@ -220,13 +220,23 @@ export default function PurchasesPage() {
 
       {/* Notifications */}
       {feedback && (
-        <div className="decent-feedback" style={{ marginBottom: "0" }}>
+        <div
+          style={{
+            backgroundColor: "#f0fdf4",
+            color: "#166534",
+            border: "1px solid #bbf7d0",
+            padding: "8px 14px",
+            borderRadius: "6px",
+            fontSize: "13px",
+            marginBottom: "14px"
+          }}
+        >
           {feedback}
         </div>
       )}
 
       {error && (
-        <div className="decent-error" style={{ marginBottom: "0" }}>
+        <div className="decent-error-box" style={{ marginBottom: "14px" }}>
           {error}
         </div>
       )}

@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo, useCallback } from "react";
-import { stockTransactionsApi, medicinesApi, batchesApi, getErrorMessage } from "../api/client";
+import { stockTransactionsApi, medicinesApi, batchesApi, usersApi, getErrorMessage } from "../api/client";
 import { useAuth } from "../context/AuthContext";
 import LedgerStatsCards from "../components/ledger/LedgerStatsCards";
 import LedgerToolbar from "../components/ledger/LedgerToolbar";
@@ -14,6 +14,7 @@ export default function StockLedgerPage() {
   const [transactions, setTransactions] = useState([]);
   const [medicines, setMedicines] = useState([]);
   const [batches, setBatches] = useState([]);
+  const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [feedback, setFeedback] = useState("");
@@ -38,25 +39,47 @@ export default function StockLedgerPage() {
     setLoading(true);
     setError("");
     try {
-      const [txRes, medsRes, batchRes] = await Promise.all([
+      const promises = [
         stockTransactionsApi.getAll(),
         medicinesApi.getAll({ pageSize: 100 }),
         batchesApi.getAll({ pageSize: 100 })
-      ]);
+      ];
 
-      setTransactions(Array.isArray(txRes.data) ? txRes.data : []);
+      // Only fetch user directory if current user has Admin privileges
+      if (isUserAdmin) {
+        promises.push(usersApi.getAll());
+      }
 
-      const medsData = medsRes.data?.items || medsRes.data || [];
+      const results = await Promise.allSettled(promises);
+      const txRes = results[0];
+      const medsRes = results[1];
+      const batchRes = results[2];
+      const usersRes = isUserAdmin ? results[3] : null;
+
+      if (txRes.status === "fulfilled") {
+        setTransactions(Array.isArray(txRes.value.data) ? txRes.value.data : []);
+      } else {
+        throw txRes.reason;
+      }
+
+      const medsData = medsRes.status === "fulfilled" ? (medsRes.value.data?.items || medsRes.value.data || []) : [];
       setMedicines(Array.isArray(medsData) ? medsData : []);
 
-      const batchesData = batchRes.data?.items || batchRes.data || [];
+      const batchesData = batchRes.status === "fulfilled" ? (batchRes.value.data?.items || batchRes.value.data || []) : [];
       setBatches(Array.isArray(batchesData) ? batchesData : []);
+
+      if (usersRes && usersRes.status === "fulfilled") {
+        const usersData = usersRes.value.data?.items || usersRes.value.data || [];
+        setUsers(Array.isArray(usersData) ? usersData : []);
+      } else {
+        setUsers([]);
+      }
     } catch (err) {
       setError(getErrorMessage(err) || "Failed to load stock ledger transactions.");
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [isUserAdmin]);
 
   useEffect(() => {
     loadData();
@@ -113,13 +136,18 @@ export default function StockLedgerPage() {
 
         const reason = (t.reason || "").toLowerCase();
         const idStr = String(t.id);
+        const creator = (t.createdByName || t.userFullName || t.createdBy || "").toLowerCase();
+        const matchedUser = users.find((u) => String(u.id) === String(t.createdBy));
+        const matchedUserName = (matchedUser?.fullName || matchedUser?.userName || "").toLowerCase();
 
         return (
           medName.includes(q) ||
           medCode.includes(q) ||
           batchNo.includes(q) ||
           reason.includes(q) ||
-          idStr.includes(q)
+          idStr.includes(q) ||
+          creator.includes(q) ||
+          matchedUserName.includes(q)
         );
       });
     }
@@ -279,6 +307,7 @@ export default function StockLedgerPage() {
           transactions={paginatedTransactions}
           medicines={medicines}
           batches={batches}
+          users={users}
           loading={loading}
           sortBy={sortBy}
           sortDirection={sortDirection}

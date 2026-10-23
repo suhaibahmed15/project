@@ -112,11 +112,12 @@ namespace PharmacyStockExpiryMonitor.Api.Repositories
                 .FirstOrDefaultAsync();
 
             var refDate = latestTxDate.HasValue ? latestTxDate.Value.Date : today;
-            var startMonth = new DateTime(refDate.Year, refDate.Month, 1, 0, 0, 0, DateTimeKind.Utc).AddMonths(-5);
-            var endMonth = new DateTime(refDate.Year, refDate.Month, 1, 0, 0, 0, DateTimeKind.Utc).AddMonths(1);
+            var monthStart = new DateTime(refDate.Year, refDate.Month, 1, 0, 0, 0, DateTimeKind.Utc);
+            var monthEnd = monthStart.AddMonths(1);
 
+            // Fetch transactions for the current month (e.g. October 2026)
             var transactions = await _context.StockTransactions
-                .Where(t => t.CreatedAt >= startMonth && t.CreatedAt < endMonth)
+                .Where(t => t.CreatedAt >= monthStart && t.CreatedAt < monthEnd)
                 .Select(t => new
                 {
                     t.TransactionType,
@@ -125,37 +126,52 @@ namespace PharmacyStockExpiryMonitor.Api.Repositories
                 })
                 .ToListAsync();
 
-            var chartPoints = new List<StockLedgerChartPointDto>();
-            for (int i = 5; i >= 0; i--)
-            {
-                var monthStart = new DateTime(refDate.Year, refDate.Month, 1, 0, 0, 0, DateTimeKind.Utc).AddMonths(-i);
-                var monthEnd = monthStart.AddMonths(1);
-                var monthLabel = monthStart.ToString("MMM yyyy");
+            // Collect active transaction dates in this month
+            var dates = transactions
+                .Select(t => t.CreatedAt.Date)
+                .Distinct()
+                .ToList();
 
-                var monthTx = transactions
-                    .Where(t => t.CreatedAt >= monthStart && t.CreatedAt < monthEnd)
+            // Ensure recent days leading to refDate are included
+            for (int d = 4; d >= 0; d--)
+            {
+                var candidate = refDate.AddDays(-d);
+                if (candidate >= monthStart && candidate < monthEnd && !dates.Contains(candidate))
+                {
+                    dates.Add(candidate);
+                }
+            }
+
+            var sortedDates = dates.OrderBy(d => d).ToList();
+            var chartPoints = new List<StockLedgerChartPointDto>();
+
+            foreach (var day in sortedDates)
+            {
+                var nextDay = day.AddDays(1);
+                var dayTx = transactions
+                    .Where(t => t.CreatedAt >= day && t.CreatedAt < nextDay)
                     .ToList();
 
-                var stockIn = monthTx
+                var stockIn = dayTx
                     .Where(t => t.TransactionType == Enums.StockTransactionType.StockIn)
                     .Sum(t => t.Quantity);
 
-                var stockOut = monthTx
+                var stockOut = dayTx
                     .Where(t => t.TransactionType == Enums.StockTransactionType.StockOut)
                     .Sum(t => t.Quantity);
 
-                var adjustments = monthTx
+                var adjustments = dayTx
                     .Where(t => t.TransactionType == Enums.StockTransactionType.Adjustment ||
                                 t.TransactionType == Enums.StockTransactionType.Transfer)
                     .Sum(t => t.Quantity);
 
                 chartPoints.Add(new StockLedgerChartPointDto
                 {
-                    Period = monthLabel,
+                    Period = day.ToString("MMMM dd"), // e.g. "October 23"
                     StockIn = stockIn,
                     StockOut = stockOut,
                     Adjustments = adjustments,
-                    TotalTransactions = monthTx.Count
+                    TotalTransactions = dayTx.Count
                 });
             }
 

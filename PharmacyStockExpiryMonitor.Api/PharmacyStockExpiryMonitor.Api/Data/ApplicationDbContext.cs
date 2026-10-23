@@ -59,10 +59,7 @@ namespace PharmacyStockExpiryMonitor.Api.Data
                 b.Ignore(u => u.LockoutEnabled);
                 b.Ignore(u => u.LockoutEnd);
                 b.Ignore(u => u.TwoFactorEnabled);
-                b.Ignore(u => u.PhoneNumber);
                 b.Ignore(u => u.PhoneNumberConfirmed);
-                b.Ignore(u => u.ConcurrencyStamp);
-                b.Ignore(u => u.SecurityStamp);
                 b.Ignore(u => u.EmailConfirmed);
                 b.Ignore(u => u.AccessFailedCount);
             });

@@ -89,20 +89,86 @@
   width: 100%;
 }
 
-/* Page Header Typography (Unified with Dashboard) */
-.decent-page-title {
-  margin: 0;
-  font-size: 22px;
-  font-weight: 700;
-  color: #152614;
-  letter-spacing: -0.3px;
+/* ==========================================================================
+   Global Unified Page Container & Header Standard
+   Guarantees identical position, width, padding, and zero-shift transitions
+   ========================================================================== */
+
+.page-container-standard,
+.dashboard-page-container,
+.decent-page-container,
+.batches-page-container,
+.purchases-page-container,
+.ledger-page-container,
+.alerts-page-container,
+.intelligence-container,
+.users-page-container {
+  width: 100% !important;
+  max-width: 1320px !important;
+  margin: 0 auto !important;
+  padding: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 20px !important;
+  box-sizing: border-box !important;
 }
 
-.decent-page-subtitle {
-  margin: 4px 0 0 0;
-  font-size: 13.5px;
-  color: #64748b;
+.page-header-standard,
+.dashboard-header,
+.decent-page-header,
+.batches-header,
+.purchases-header,
+.ledger-header,
+.alerts-header,
+.intelligence-header,
+.users-header {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  flex-wrap: wrap !important;
+  gap: 16px !important;
+  background-color: #FFFFFF !important;
+  padding: 20px 24px !important;
+  min-height: 84px !important;
+  box-sizing: border-box !important;
+  border-radius: 12px !important;
+  border: 1px solid var(--color-border, #E2E8F0) !important;
+  box-shadow: var(--shadow-sm, 0 1px 2px rgba(0, 0, 0, 0.04)) !important;
+  width: 100% !important;
 }
+
+.page-title-standard,
+.dashboard-title,
+.decent-page-title,
+.batches-title,
+.purchases-title,
+.ledger-title,
+.alerts-title,
+.intelligence-title,
+.users-title {
+  margin: 0 !important;
+  font-size: 22px !important;
+  font-weight: 700 !important;
+  color: #152614 !important;
+  letter-spacing: -0.3px !important;
+  line-height: 1.25 !important;
+}
+
+.page-subtitle-standard,
+.dashboard-subtitle,
+.decent-page-subtitle,
+.batches-subtitle,
+.purchases-subtitle,
+.ledger-subtitle,
+.alerts-subtitle,
+.intelligence-subtitle,
+.users-subtitle {
+  margin: 4px 0 0 0 !important;
+  font-size: 13.5px !important;
+  color: #64748b !important;
+  line-height: 1.4 !important;
+}
+
 
 /* Common Pagination & Controls */
 .decent-pagination {
@@ -164,4 +230,26 @@
 .decent-select:focus {
   border-color: #152614;
   box-shadow: 0 0 0 3px rgba(21, 38, 20, 0.15);
+}
+
+/* Decent Notifications & Alerts */
+.decent-feedback {
+  background-color: #f0fdf4;
+  color: #166534;
+  border: 1px solid #bbf7d0;
+  padding: 8px 14px;
+  border-radius: 6px;
+  font-size: 13px;
+  margin-bottom: 14px;
+}
+
+.decent-error-box,
+.decent-error {
+  background-color: #fee2e2;
+  color: #991b1b;
+  border: 1px solid #fecaca;
+  padding: 10px 14px;
+  border-radius: 6px;
+  font-size: 13px;
+  margin-bottom: 14px;
 }
