@@ -15,18 +15,16 @@ export default function PurchasesPage() {
 
   // Role permissions:
   // - Only Admin can delete purchases
-  // - Admin, StoreManager, and Pharmacist can view and record purchases
+  // - Admin and StoreManager can create purchases
+  // - Pharmacist can only view purchases
   const canDelete = Boolean(isAdmin || roleId === 1 || roleId === "1");
   const canCreate = Boolean(
     isAdmin ||
     isStoreManager ||
-    isPharmacist ||
     roleId === 1 ||
     roleId === 2 ||
-    roleId === 3 ||
     roleId === "1" ||
-    roleId === "2" ||
-    roleId === "3"
+    roleId === "2"
   );
 
   // Data states

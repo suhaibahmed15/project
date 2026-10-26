@@ -126,13 +126,14 @@
 }
 
 .decent-code {
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-  font-size: 12px;
-  color: #152614;
-  background-color: #F1F5F9;
-  border: 1px solid var(--color-border, #E2E8F0);
-  padding: 2px 7px;
-  border-radius: 4px;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  color: #334155;
+  background: none !important;
+  border: none !important;
+  padding: 0 !important;
+  display: inline-block;
 }
 
 .decent-name {
@@ -323,73 +324,60 @@
 }
 
 /* Action Buttons */
-.decent-action-btn {
+.decent-action-btn,
+.decent-action-btn.edit,
+.decent-action-btn.delete {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 6px;
-  padding: 6px 12px;
+  gap: 5px;
+  padding: 5px 10px;
   font-size: 12px;
-  font-weight: 600;
+  font-weight: 500;
   border-radius: 6px;
-  border: 1px solid transparent;
+  border: 1px solid #cbd5e1;
+  background-color: #ffffff;
+  color: #334155;
   cursor: pointer;
-  transition: all 0.18s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  transition: all 0.15s ease;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
   line-height: 1;
-  letter-spacing: 0.15px;
+}
+
+.decent-action-btn.delete {
+  margin-left: 6px;
 }
 
 .decent-action-btn svg {
   flex-shrink: 0;
-  transition: transform 0.18s cubic-bezier(0.4, 0, 0.2, 1);
+  stroke: currentColor;
 }
 
-.decent-action-btn.edit {
-  color: #152614;
-  background: linear-gradient(180deg, #f0fdf4 0%, #dcfce7 100%);
-  border-color: #86efac;
-}
-
-.decent-action-btn.edit:hover {
-  background: #152614;
-  color: #ffffff;
-  border-color: #152614;
-  box-shadow: 0 4px 10px rgba(21, 38, 20, 0.25);
-  transform: translateY(-1px);
-}
-
-.decent-action-btn.edit:hover svg {
-  transform: rotate(-10deg) scale(1.1);
-}
-
-.decent-action-btn.edit:active {
-  transform: translateY(0);
-  box-shadow: 0 1px 2px rgba(21, 38, 20, 0.2);
-}
-
-.decent-action-btn.delete {
-  color: #991b1b;
-  background: linear-gradient(180deg, #fff5f5 0%, #fee2e2 100%);
-  border-color: #fca5a5;
-  margin-left: 8px;
-}
-
+.decent-action-btn:hover,
+.decent-action-btn.edit:hover,
 .decent-action-btn.delete:hover {
-  background: #dc2626;
-  color: #ffffff;
-  border-color: #dc2626;
-  box-shadow: 0 4px 10px rgba(220, 38, 38, 0.25);
-  transform: translateY(-1px);
+  background-color: #152614 !important;
+  color: #ffffff !important;
+  border-color: #152614 !important;
+  box-shadow: 0 2px 5px rgba(21, 38, 20, 0.2);
+  transform: none !important;
 }
 
+.decent-action-btn:hover svg,
+.decent-action-btn.edit:hover svg,
 .decent-action-btn.delete:hover svg {
-  transform: scale(1.1);
+  color: #ffffff !important;
+  stroke: #ffffff !important;
+  transform: none;
 }
 
+.decent-action-btn:active,
+.decent-action-btn.edit:active,
 .decent-action-btn.delete:active {
-  transform: translateY(0);
-  box-shadow: 0 1px 2px rgba(220, 38, 38, 0.2);
+  background-color: #0f1c0e !important;
+  color: #ffffff !important;
+  border-color: #0f1c0e !important;
+  transform: none;
 }
 
 /* Modal */

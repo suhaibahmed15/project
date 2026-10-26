@@ -25,7 +25,7 @@ export default function IntelligenceStatsCards({ predictions = [] }) {
       <div className="kpi-card">
         <div className="kpi-header">
           <span className="kpi-title">Total AI Predictions</span>
-          <div className="kpi-icon navy">
+          <div className="kpi-icon">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3L12 3z" />
             </svg>
@@ -38,7 +38,7 @@ export default function IntelligenceStatsCards({ predictions = [] }) {
       <div className="kpi-card">
         <div className="kpi-header">
           <span className="kpi-title">Stock-Out Threats</span>
-          <div className="kpi-icon danger">
+          <div className="kpi-icon">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <circle cx="12" cy="12" r="10" />
               <line x1="12" y1="8" x2="12" y2="12" />
@@ -53,7 +53,7 @@ export default function IntelligenceStatsCards({ predictions = [] }) {
       <div className="kpi-card">
         <div className="kpi-header">
           <span className="kpi-title">Urgent (&le; 3 Days Left)</span>
-          <div className="kpi-icon warning">
+          <div className="kpi-icon">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <circle cx="12" cy="12" r="10" />
               <polyline points="12 6 12 12 16 14" />
@@ -67,7 +67,7 @@ export default function IntelligenceStatsCards({ predictions = [] }) {
       <div className="kpi-card">
         <div className="kpi-header">
           <span className="kpi-title">Avg Burn Rate</span>
-          <div className="kpi-icon success">
+          <div className="kpi-icon">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <polyline points="23 6 13.5 15.5 8.5 10.5 1 18" />
               <polyline points="17 6 23 6 23 12" />

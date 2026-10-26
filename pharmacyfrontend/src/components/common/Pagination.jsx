@@ -1,7 +1,8 @@
 import "../../styles/common.css";
 
 export default function Pagination({
-  page = 1,
+  page,
+  currentPage,
   totalPages = 1,
   pageSize = 10,
   totalCount = 0,
@@ -9,13 +10,14 @@ export default function Pagination({
   onPageSizeChange,
   loading = false
 }) {
-  const startItem = totalCount === 0 ? 0 : (page - 1) * pageSize + 1;
-  const endItem = Math.min(page * pageSize, totalCount);
+  const activePage = Number(currentPage ?? page ?? 1) || 1;
+  const startItem = totalCount === 0 ? 0 : (activePage - 1) * pageSize + 1;
+  const endItem = Math.min(activePage * pageSize, totalCount);
 
   // Generate page numbers array with limit of 5 around current page
   const pageNumbers = Array.from({ length: totalPages }, (_, i) => i + 1).slice(
-    Math.max(0, page - 3),
-    Math.min(totalPages, page + 2)
+    Math.max(0, activePage - 3),
+    Math.min(totalPages, activePage + 2)
   );
 
   return (
@@ -43,8 +45,8 @@ export default function Pagination({
         <button
           type="button"
           className="decent-btn"
-          disabled={page <= 1 || loading}
-          onClick={() => onPageChange(Math.max(1, page - 1))}
+          disabled={activePage <= 1 || loading}
+          onClick={() => onPageChange(Math.max(1, activePage - 1))}
         >
           Previous
         </button>
@@ -55,10 +57,10 @@ export default function Pagination({
             type="button"
             className="decent-btn"
             style={{
-              fontWeight: p === page ? "700" : "500",
-              backgroundColor: p === page ? "#152614" : "#ffffff",
-              color: p === page ? "#ffffff" : "#334155",
-              borderColor: p === page ? "#152614" : "#E2E8F0"
+              fontWeight: p === activePage ? "700" : "500",
+              backgroundColor: p === activePage ? "#152614" : "#ffffff",
+              color: p === activePage ? "#ffffff" : "#334155",
+              borderColor: p === activePage ? "#152614" : "#E2E8F0"
             }}
             onClick={() => onPageChange(p)}
           >
@@ -69,8 +71,8 @@ export default function Pagination({
         <button
           type="button"
           className="decent-btn"
-          disabled={page >= totalPages || loading}
-          onClick={() => onPageChange(Math.min(totalPages, page + 1))}
+          disabled={activePage >= totalPages || loading}
+          onClick={() => onPageChange(Math.min(totalPages, activePage + 1))}
         >
           Next
         </button>

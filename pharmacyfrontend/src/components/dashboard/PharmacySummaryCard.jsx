@@ -4,7 +4,7 @@ export default function PharmacySummaryCard({ stats = {} }) {
   return (
     <div className="panel-card">
       <h3 className="panel-title">Pharmacy Summary</h3>
-      <div className="panel-list" style={{ marginTop: "14px" }}>
+      <div className="panel-list">
         <div className="panel-item">
           <span className="panel-item-label">Total Stock Units</span>
           <span className="panel-item-val font-semibold">

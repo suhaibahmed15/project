@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using PharmacyStockExpiryMonitor.Api.Data;
 using PharmacyStockExpiryMonitor.Api.Entities;
 using PharmacyStockExpiryMonitor.Api.Repositories.Interfaces;
@@ -25,6 +25,7 @@ public class MedicineRepository : IMedicineRepository
     {
         var query = _context.Medicines
             .Include(x => x.Category)
+            .Include(x => x.Batches.Where(b => !b.IsDeleted))
             .Where(x => !x.IsDeleted)
             .AsQueryable();
 
@@ -159,6 +160,7 @@ public class MedicineRepository : IMedicineRepository
     {
         return await _context.Medicines
             .Include(x => x.Category)
+            .Include(x => x.Batches.Where(b => !b.IsDeleted))
             .FirstOrDefaultAsync(x =>
                 x.Id == id &&
                 !x.IsDeleted);
@@ -168,6 +170,8 @@ public class MedicineRepository : IMedicineRepository
         string medicineCode)
     {
         return await _context.Medicines
+            .Include(x => x.Category)
+            .Include(x => x.Batches.Where(b => !b.IsDeleted))
             .FirstOrDefaultAsync(x =>
                 x.MedicineCode == medicineCode &&
                 !x.IsDeleted);
@@ -178,6 +182,8 @@ public class MedicineRepository : IMedicineRepository
         int excludeId)
     {
         return await _context.Medicines
+            .Include(x => x.Category)
+            .Include(x => x.Batches.Where(b => !b.IsDeleted))
             .FirstOrDefaultAsync(x =>
                 x.MedicineCode == medicineCode &&
                 x.Id != excludeId &&

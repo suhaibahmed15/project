@@ -181,40 +181,44 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 6px;
-  background: linear-gradient(180deg, #fff5f5 0%, #fee2e2 100%);
-  color: #991b1b;
-  border: 1px solid #fca5a5;
-  padding: 6px 12px;
-  border-radius: var(--radius-sm, 6px);
+  gap: 5px;
+  background-color: #ffffff;
+  color: #334155;
+  border: 1px solid #cbd5e1;
+  padding: 5px 10px;
+  border-radius: 6px;
   font-size: 12px;
-  font-weight: 600;
+  font-weight: 500;
   cursor: pointer;
-  transition: all 0.18s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  transition: all 0.15s ease;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
   line-height: 1;
 }
 
 .btn-danger-outline svg {
   flex-shrink: 0;
-  transition: transform 0.18s ease;
+  stroke: currentColor;
 }
 
 .btn-danger-outline:hover {
-  background: #dc2626;
-  color: #ffffff;
-  border-color: #dc2626;
-  box-shadow: 0 4px 10px rgba(220, 38, 38, 0.25);
-  transform: translateY(-1px);
+  background-color: #152614 !important;
+  color: #ffffff !important;
+  border-color: #152614 !important;
+  box-shadow: 0 2px 5px rgba(21, 38, 20, 0.2);
+  transform: none !important;
 }
 
 .btn-danger-outline:hover svg {
-  transform: scale(1.1);
+  color: #ffffff !important;
+  stroke: #ffffff !important;
+  transform: none;
 }
 
 .btn-danger-outline:active {
-  transform: translateY(0);
-  box-shadow: 0 1px 2px rgba(220, 38, 38, 0.2);
+  background-color: #0f1c0e !important;
+  color: #ffffff !important;
+  border-color: #0f1c0e !important;
+  transform: none;
 }
 
 /* Modal Styles */

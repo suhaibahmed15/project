@@ -41,8 +41,9 @@ namespace PharmacyStockExpiryMonitor.Api.Controllers
         }
 
         // POST: api/Purchase
-        // Creates a purchase along with its purchase items.
+        // Creates a purchase along with its purchase items (Admin & StoreManager only).
         [HttpPost]
+        [Authorize(Roles = "Admin,StoreManager")]
         public async Task<IActionResult> Create(CreatePurchaseDto dto)
         {
             var purchase = await _purchaseService.CreateAsync(dto);

@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using PharmacyStockExpiryMonitor.Api.Data;
 using PharmacyStockExpiryMonitor.Api.Entities;
 using PharmacyStockExpiryMonitor.Api.Repositories.Interfaces;
@@ -63,6 +63,9 @@ public class SupplierRepository : ISupplierRepository
         {
             query = sortBy switch
             {
+                "id" =>
+                    query.OrderByDescending(x => x.Id),
+
                 "contactperson" =>
                     query.OrderByDescending(x => x.ContactPerson),
 
@@ -78,6 +81,9 @@ public class SupplierRepository : ISupplierRepository
                 "isactive" =>
                     query.OrderByDescending(x => x.IsActive),
 
+                "createdat" =>
+                    query.OrderByDescending(x => x.CreatedAt),
+
                 _ =>
                     query.OrderByDescending(x => x.Name)
             };
@@ -86,6 +92,9 @@ public class SupplierRepository : ISupplierRepository
         {
             query = sortBy switch
             {
+                "id" =>
+                    query.OrderBy(x => x.Id),
+
                 "contactperson" =>
                     query.OrderBy(x => x.ContactPerson),
 
@@ -100,6 +109,9 @@ public class SupplierRepository : ISupplierRepository
 
                 "isactive" =>
                     query.OrderBy(x => x.IsActive),
+
+                "createdat" =>
+                    query.OrderBy(x => x.CreatedAt),
 
                 _ =>
                     query.OrderBy(x => x.Name)

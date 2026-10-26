@@ -106,33 +106,34 @@
   letter-spacing: 0.5px;
 }
 
-.ledger-kpi-icon {
+.ledger-kpi-card:hover {
+  transform: none;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+.ledger-kpi-icon,
+.ledger-kpi-icon.navy,
+.ledger-kpi-icon.success,
+.ledger-kpi-icon.danger,
+.ledger-kpi-icon.warning {
   width: 32px;
   height: 32px;
   border-radius: 6px;
+  background-color: #f8fafc !important;
+  border: 1px solid #e2e8f0 !important;
+  color: #64748b !important;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.ledger-kpi-icon.navy {
-  background-color: #F1F5F9;
-  color: #152614;
-}
-
-.ledger-kpi-icon.success {
-  background-color: #dcfce7;
-  color: #166534;
-}
-
-.ledger-kpi-icon.danger {
-  background-color: #fee2e2;
-  color: #991b1b;
-}
-
-.ledger-kpi-icon.warning {
-  background-color: #fef3c7;
-  color: #92400e;
+.ledger-kpi-icon svg,
+.ledger-kpi-icon.navy svg,
+.ledger-kpi-icon.success svg,
+.ledger-kpi-icon.danger svg,
+.ledger-kpi-icon.warning svg {
+  color: #64748b !important;
+  stroke: #64748b !important;
 }
 
 .ledger-kpi-value {

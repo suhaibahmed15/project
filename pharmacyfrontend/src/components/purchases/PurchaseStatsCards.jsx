@@ -23,7 +23,7 @@ export default function PurchaseStatsCards({ purchases = [] }) {
       <div className="purchases-kpi-card">
         <div className="purchases-kpi-top">
           <span className="purchases-kpi-label">Total Invoices</span>
-          <div className="purchases-kpi-icon green">
+          <div className="purchases-kpi-icon">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z" />
               <line x1="3" y1="6" x2="21" y2="6" />
@@ -39,7 +39,7 @@ export default function PurchaseStatsCards({ purchases = [] }) {
       <div className="purchases-kpi-card">
         <div className="purchases-kpi-top">
           <span className="purchases-kpi-label">Total Procurement Spend</span>
-          <div className="purchases-kpi-icon emerald">
+          <div className="purchases-kpi-icon">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <line x1="12" y1="1" x2="12" y2="23" />
               <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
@@ -54,7 +54,7 @@ export default function PurchaseStatsCards({ purchases = [] }) {
       <div className="purchases-kpi-card">
         <div className="purchases-kpi-top">
           <span className="purchases-kpi-label">Avg Order Value</span>
-          <div className="purchases-kpi-icon blue">
+          <div className="purchases-kpi-icon">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <polyline points="22 7 13.5 15.5 8.5 10.5 2 17" />
               <polyline points="16 7 22 7 22 13" />
@@ -69,7 +69,7 @@ export default function PurchaseStatsCards({ purchases = [] }) {
       <div className="purchases-kpi-card">
         <div className="purchases-kpi-top">
           <span className="purchases-kpi-label">Active Vendors</span>
-          <div className="purchases-kpi-icon purple">
+          <div className="purchases-kpi-icon">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <rect x="1" y="3" width="15" height="13" />
               <polygon points="16 8 20 8 23 11 23 16 16 16 16 8" />

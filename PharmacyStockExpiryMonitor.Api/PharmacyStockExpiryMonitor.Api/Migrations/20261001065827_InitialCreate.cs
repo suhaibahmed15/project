@@ -432,7 +432,7 @@ namespace PharmacyStockExpiryMonitor.Api.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     MedicineId = table.Column<int>(type: "int", nullable: false),
                     BatchId = table.Column<int>(type: "int", nullable: false),
-                    TransactionType = table.Column<int>(type: "int", nullable: false),
+                    B = table.Column<int>(type: "int", nullable: false),
                     Quantity = table.Column<int>(type: "int", nullable: false),
                     ReferenceNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Notes = table.Column<string>(type: "nvarchar(max)", nullable: true),

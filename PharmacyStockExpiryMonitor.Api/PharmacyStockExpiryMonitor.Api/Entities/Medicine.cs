@@ -69,7 +69,7 @@ public class Medicine : IAuditableEntity
     {
         get
         {
-            return Batches.Sum(x => x.RemainingQuantity);
+            return Batches?.Where(x => !x.IsDeleted).Sum(x => x.RemainingQuantity) ?? 0;
         }
     }
 }

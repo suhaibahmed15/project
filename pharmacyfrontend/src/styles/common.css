@@ -96,6 +96,7 @@
 
 .page-container-standard,
 .dashboard-page-container,
+.category-page-container,
 .decent-page-container,
 .batches-page-container,
 .purchases-page-container,
@@ -115,6 +116,7 @@
 
 .page-header-standard,
 .dashboard-header,
+.category-header-card,
 .decent-page-header,
 .batches-header,
 .purchases-header,
@@ -139,6 +141,7 @@
 
 .page-title-standard,
 .dashboard-title,
+.category-page-title,
 .decent-page-title,
 .batches-title,
 .purchases-title,
@@ -152,10 +155,12 @@
   color: #152614 !important;
   letter-spacing: -0.3px !important;
   line-height: 1.25 !important;
+  font-family: inherit !important;
 }
 
 .page-subtitle-standard,
 .dashboard-subtitle,
+.category-page-subtitle,
 .decent-page-subtitle,
 .batches-subtitle,
 .purchases-subtitle,
@@ -167,6 +172,127 @@
   font-size: 13.5px !important;
   color: #64748b !important;
   line-height: 1.4 !important;
+  font-family: inherit !important;
+}
+
+/* Global Unified Action Buttons (Edit, Delete, View, Toggle) */
+.category-action-btn,
+.decent-action-btn,
+.batch-action-btn,
+.btn-action-view,
+.btn-danger-outline {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 5px !important;
+  padding: 5px 10px !important;
+  font-size: 12px !important;
+  font-weight: 500 !important;
+  border-radius: 6px !important;
+  border: 1px solid #cbd5e1 !important;
+  background-color: #ffffff !important;
+  color: #334155 !important;
+  cursor: pointer !important;
+  transition: all 0.15s ease !important;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04) !important;
+  line-height: 1 !important;
+  text-decoration: none !important;
+  font-family: inherit !important;
+}
+
+.category-action-btn svg,
+.decent-action-btn svg,
+.batch-action-btn svg,
+.btn-action-view svg,
+.btn-danger-outline svg {
+  flex-shrink: 0 !important;
+  stroke: currentColor !important;
+}
+
+.category-action-btn:hover,
+.category-action-btn.edit:hover,
+.category-action-btn.delete:hover,
+.category-action-btn.toggle:hover,
+.supplier-action-btn:hover,
+.supplier-action-btn.edit:hover,
+.supplier-action-btn.delete:hover,
+.supplier-action-btn.toggle:hover,
+.decent-action-btn:hover,
+.decent-action-btn.edit:hover,
+.decent-action-btn.delete:hover,
+.batch-action-btn:hover,
+.batch-action-btn.edit:hover,
+.batch-action-btn.delete:hover,
+.btn-action-view:hover,
+.btn-danger-outline:hover {
+  background-color: #152614 !important;
+  color: #ffffff !important;
+  border-color: #152614 !important;
+  box-shadow: 0 2px 5px rgba(21, 38, 20, 0.2) !important;
+  transform: none !important;
+}
+
+.category-action-btn:hover svg,
+.category-action-btn.edit:hover svg,
+.category-action-btn.delete:hover svg,
+.category-action-btn.toggle:hover svg,
+.supplier-action-btn:hover svg,
+.supplier-action-btn.edit:hover svg,
+.supplier-action-btn.delete:hover svg,
+.supplier-action-btn.toggle:hover svg,
+.decent-action-btn:hover svg,
+.decent-action-btn.edit:hover svg,
+.decent-action-btn.delete:hover svg,
+.batch-action-btn:hover svg,
+.batch-action-btn.edit:hover svg,
+.batch-action-btn.delete:hover svg,
+.btn-action-view:hover svg,
+.btn-danger-outline:hover svg {
+  color: #ffffff !important;
+  stroke: #ffffff !important;
+  transform: none !important;
+}
+
+/* Global KPI & Stat Cards: No colored icons, plain gray icon matching Batch cards */
+.batch-kpi-card:hover,
+.category-stat-card:hover,
+.purchases-kpi-card:hover,
+.ledger-kpi-card:hover,
+.alerts-kpi-card:hover,
+.kpi-card:hover {
+  transform: none !important;
+}
+
+.batch-kpi-icon,
+.category-stat-icon-wrap,
+.purchases-kpi-icon,
+.ledger-kpi-icon,
+.alerts-kpi-icon,
+.dashboard-kpi-icon,
+.kpi-icon,
+.kpi-icon-pill {
+  width: 32px !important;
+  height: 32px !important;
+  border-radius: 6px !important;
+  background-color: #f8fafc !important;
+  border: 1px solid #e2e8f0 !important;
+  color: #64748b !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  box-shadow: none !important;
+}
+
+.batch-kpi-icon svg,
+.category-stat-icon-wrap svg,
+.purchases-kpi-icon svg,
+.ledger-kpi-icon svg,
+.alerts-kpi-icon svg,
+.dashboard-kpi-icon svg,
+.kpi-icon svg,
+.kpi-icon-pill svg {
+  color: #64748b !important;
+  stroke: #64748b !important;
 }
 
 

@@ -127,7 +127,7 @@ export default function RecordTransactionModal({
                 <option value="">-- Select Medicine --</option>
                 {medicines.map((m) => (
                   <option key={m.id} value={m.id}>
-                    {m.name} ({m.medicineCode})
+                    {m.name} ({m.medicineCode}) — Stock: {m.currentStock ?? 0}
                   </option>
                 ))}
               </select>

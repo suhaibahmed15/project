@@ -16,6 +16,8 @@ import ErrorPage from "./pages/ErrorPage";
 import UsersPage from "./pages/UsersPage";
 import StockLedgerPage from "./pages/StockLedgerPage";
 import PurchasesPage from "./pages/PurchasesPage";
+import CategoriesPage from "./pages/CategoriesPage";
+import SuppliersPage from "./pages/SuppliersPage";
 
 export default function App() {
   return (
@@ -37,8 +39,10 @@ export default function App() {
               <Route path="/ledger" element={<StockLedgerPage />} />
               <Route path="/purchases" element={<PurchasesPage />} />
               <Route path="/purchase" element={<PurchasesPage />} />
-              <Route path="/categories" element={<DashboardPage />} />
-              <Route path="/suppliers" element={<DashboardPage />} />
+              <Route path="/categories" element={<CategoriesPage />} />
+              <Route path="/category" element={<CategoriesPage />} />
+              <Route path="/suppliers" element={<SuppliersPage />} />
+              <Route path="/supplier" element={<SuppliersPage />} />
               <Route path="/intelligence" element={<IntelligencePage />} />
 
               {/* Admin Only User Management Routes */}

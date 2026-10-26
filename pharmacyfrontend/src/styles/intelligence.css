@@ -135,6 +135,11 @@
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
 }
 
+.kpi-card:hover {
+  transform: none;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
 .kpi-header {
   display: flex;
   justify-content: space-between;
@@ -149,31 +154,30 @@
   letter-spacing: 0.02em;
 }
 
-.kpi-icon {
-  width: 28px;
-  height: 28px;
+.kpi-icon,
+.kpi-icon.navy,
+.kpi-icon.danger,
+.kpi-icon.warning,
+.kpi-icon.success {
+  width: 32px;
+  height: 32px;
   border-radius: 6px;
+  background-color: #f8fafc !important;
+  border: 1px solid #e2e8f0 !important;
+  color: #64748b !important;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 13px;
 }
 
-.kpi-icon.navy {
-  background-color: #F1F5F9;
-  color: #152614;
-}
-.kpi-icon.danger {
-  background-color: #fee2e2;
-  color: #dc2626;
-}
-.kpi-icon.warning {
-  background-color: #fef3c7;
-  color: #d97706;
-}
-.kpi-icon.success {
-  background-color: #dcfce7;
-  color: #16a34a;
+.kpi-icon svg,
+.kpi-icon.navy svg,
+.kpi-icon.danger svg,
+.kpi-icon.warning svg,
+.kpi-icon.success svg {
+  color: #64748b !important;
+  stroke: #64748b !important;
 }
 
 .kpi-value {

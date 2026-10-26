@@ -43,8 +43,9 @@ namespace PharmacyStockExpiryMonitor.Api.Repositories
             return await _context.Medicines
                 .Where(m => !m.IsDeleted)
                 .CountAsync(m =>
-                    m.Batches.Sum(
-                        b => b.RemainingQuantity)
+                    m.Batches
+                        .Where(b => !b.IsDeleted)
+                        .Sum(b => b.RemainingQuantity)
                     <= m.ReorderLevel);
         }
 

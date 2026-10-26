@@ -97,6 +97,26 @@ export default function MedicineModal({
                 {displayError}
               </div>
             )}
+            {mode === "edit" && (
+              <div
+                style={{
+                  backgroundColor: "#f8fafc",
+                  border: "1px solid #e2e8f0",
+                  borderRadius: "6px",
+                  padding: "8px 14px",
+                  marginBottom: "14px",
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  fontSize: "13px"
+                }}
+              >
+                <span style={{ color: "#64748b" }}>Current Stock in Active Batches:</span>
+                <span style={{ fontWeight: "700", color: "#152614" }}>
+                  {(initialData?.currentStock ?? 0).toLocaleString()} units
+                </span>
+              </div>
+            )}
 
             <div className="decent-form-row">
               <div className="decent-form-group">
