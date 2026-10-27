@@ -80,15 +80,18 @@ export default function AlertsPage() {
       unread: alerts.filter((a) => !a.isRead).length,
       active: alerts.filter((a) => !a.isResolved).length,
       resolved: alerts.filter((a) => a.isResolved).length,
-      lowstock: alerts.filter(
-        (a) => a.alertType === 1 || String(a.alertType).toLowerCase() === "lowstock"
-      ).length,
-      nearexpiry: alerts.filter(
-        (a) => a.alertType === 2 || String(a.alertType).toLowerCase().includes("near")
-      ).length,
-      expired: alerts.filter(
-        (a) => a.alertType === 3 || String(a.alertType).toLowerCase().includes("expired")
-      ).length
+      lowstock: alerts.filter((a) => {
+        const s = String(a.alertType || "").toLowerCase().replace(/[\s_-]+/g, "");
+        return a.alertType === 1 || s === "1" || s === "lowstock";
+      }).length,
+      nearexpiry: alerts.filter((a) => {
+        const s = String(a.alertType || "").toLowerCase().replace(/[\s_-]+/g, "");
+        return a.alertType === 2 || s === "2" || s.includes("near");
+      }).length,
+      expired: alerts.filter((a) => {
+        const s = String(a.alertType || "").toLowerCase().replace(/[\s_-]+/g, "");
+        return a.alertType === 3 || s === "3" || s.includes("expired");
+      }).length
     };
   }, [alerts]);
 
@@ -170,17 +173,20 @@ export default function AlertsPage() {
     } else if (tabFilter === "resolved") {
       list = list.filter((a) => a.isResolved);
     } else if (tabFilter === "lowstock") {
-      list = list.filter(
-        (a) => a.alertType === 1 || String(a.alertType).toLowerCase() === "lowstock"
-      );
+      list = list.filter((a) => {
+        const s = String(a.alertType || "").toLowerCase().replace(/[\s_-]+/g, "");
+        return a.alertType === 1 || s === "1" || s === "lowstock";
+      });
     } else if (tabFilter === "nearexpiry") {
-      list = list.filter(
-        (a) => a.alertType === 2 || String(a.alertType).toLowerCase().includes("near")
-      );
+      list = list.filter((a) => {
+        const s = String(a.alertType || "").toLowerCase().replace(/[\s_-]+/g, "");
+        return a.alertType === 2 || s === "2" || s.includes("near");
+      });
     } else if (tabFilter === "expired") {
-      list = list.filter(
-        (a) => a.alertType === 3 || String(a.alertType).toLowerCase().includes("expired")
-      );
+      list = list.filter((a) => {
+        const s = String(a.alertType || "").toLowerCase().replace(/[\s_-]+/g, "");
+        return a.alertType === 3 || s === "3" || s.includes("expired");
+      });
     }
 
     // Filter by Medicine
@@ -237,9 +243,9 @@ export default function AlertsPage() {
   // Render Alert Type Badge & Icon
   const renderTypeDetails = (type) => {
     const num = Number(type);
-    const str = String(type).toLowerCase();
+    const str = String(type || "").toLowerCase().replace(/[\s_-]+/g, "");
 
-    if (num === 1 || str === "lowstock") {
+    if (num === 1 || str === "1" || str === "lowstock") {
       return {
         badgeClass: "low-stock",
         label: "Low Stock",
@@ -247,7 +253,7 @@ export default function AlertsPage() {
         icon: "⚠️"
       };
     }
-    if (num === 2 || str.includes("near")) {
+    if (num === 2 || str === "2" || str.includes("near")) {
       return {
         badgeClass: "near-expiry",
         label: "Near Expiry",
@@ -255,7 +261,7 @@ export default function AlertsPage() {
         icon: "⏳"
       };
     }
-    if (num === 3 || str.includes("expired")) {
+    if (num === 3 || str === "3" || str.includes("expired")) {
       return {
         badgeClass: "expired",
         label: "Expired",

@@ -10,13 +10,16 @@ namespace PharmacyStockExpiryMonitor.Api.Services
     {
         private readonly IBatchRepository _repository;
         private readonly IAuditLogService _auditLogService;
+        private readonly IAlertService _alertService;
 
         public BatchService(
             IBatchRepository repository,
-            IAuditLogService auditLogService)
+            IAuditLogService auditLogService,
+            IAlertService alertService)
         {
             _repository = repository;
             _auditLogService = auditLogService;
+            _alertService = alertService;
         }
 
         public async Task<List<BatchDto>> GetAllAsync()
@@ -144,6 +147,15 @@ namespace PharmacyStockExpiryMonitor.Api.Services
                     createdBatch.IsDeleted
                 });
 
+            try
+            {
+                await _alertService.CheckAndGenerateExpiryAlertsAsync(force: true);
+            }
+            catch
+            {
+                // Non-blocking for batch creation
+            }
+
             return new BatchDto
             {
                 Id = createdBatch.Id,
@@ -212,6 +224,15 @@ namespace PharmacyStockExpiryMonitor.Api.Services
                     batch.UnitCost,
                     batch.IsDeleted
                 });
+
+            try
+            {
+                await _alertService.CheckAndGenerateExpiryAlertsAsync(force: true);
+            }
+            catch
+            {
+                // Non-blocking for batch update
+            }
 
             return new BatchDto
             {

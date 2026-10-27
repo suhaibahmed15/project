@@ -2,13 +2,18 @@ export default function AlertStatsCards({ alerts = [] }) {
   const totalAlerts = alerts.length;
   const unreadCount = alerts.filter((a) => !a.isRead).length;
   const activeCount = alerts.filter((a) => !a.isResolved).length;
-  const expiryCount = alerts.filter(
-    (a) =>
+  const expiryCount = alerts.filter((a) => {
+    const s = String(a.alertType || "").toLowerCase().replace(/[\s_-]+/g, "");
+    return (
       a.alertType === 2 ||
       a.alertType === 3 ||
-      String(a.alertType).toLowerCase().includes("expiry") ||
-      String(a.alertType).toLowerCase().includes("expired")
-  ).length;
+      s === "2" ||
+      s === "3" ||
+      s.includes("near") ||
+      s.includes("expiry") ||
+      s.includes("expired")
+    );
+  }).length;
   const resolvedCount = alerts.filter((a) => a.isResolved).length;
 
   return (

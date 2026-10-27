@@ -3,19 +3,20 @@ import Pagination from "../common/Pagination";
 
 function getTransactionTypeMeta(type) {
   const num = Number(type);
-  if (num === 1 || String(type).toLowerCase() === "stockin") {
+  const s = String(type || "").toLowerCase().replace(/[\s_-]+/g, "");
+  if (num === 1 || s === "1" || s === "stockin") {
     return { label: "Stock In", className: "badge-stock-in", prefix: "+" };
   }
-  if (num === 2 || String(type).toLowerCase() === "stockout") {
+  if (num === 2 || s === "2" || s === "stockout") {
     return { label: "Stock Out", className: "badge-stock-out", prefix: "-" };
   }
-  if (num === 3 || String(type).toLowerCase() === "adjustment") {
+  if (num === 3 || s === "3" || s === "adjustment") {
     return { label: "Adjustment", className: "badge-adjustment", prefix: "±" };
   }
-  if (num === 4 || String(type).toLowerCase() === "transfer") {
+  if (num === 4 || s === "4" || s === "transfer") {
     return { label: "Transfer", className: "badge-transfer", prefix: "⇄" };
   }
-  return { label: "Movement", className: "badge-adjustment", prefix: "" };
+  return { label: type || "Movement", className: "badge-adjustment", prefix: "" };
 }
 
 export default function LedgerTable({

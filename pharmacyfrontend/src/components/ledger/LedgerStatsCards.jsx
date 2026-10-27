@@ -1,19 +1,22 @@
 export default function LedgerStatsCards({ transactions = [] }) {
   const totalCount = transactions.length;
 
-  const stockInItems = transactions.filter(
-    (t) => t.transactionType === 1 || String(t.transactionType).toLowerCase() === "stockin"
-  );
+  const stockInItems = transactions.filter((t) => {
+    const s = String(t.transactionType || "").toLowerCase().replace(/[\s_-]+/g, "");
+    return t.transactionType === 1 || s === "1" || s === "stockin";
+  });
   const stockInUnits = stockInItems.reduce((acc, curr) => acc + (Number(curr.Quantity) || Number(curr.quantity) || 0), 0);
 
-  const stockOutItems = transactions.filter(
-    (t) => t.transactionType === 2 || String(t.transactionType).toLowerCase() === "stockout"
-  );
+  const stockOutItems = transactions.filter((t) => {
+    const s = String(t.transactionType || "").toLowerCase().replace(/[\s_-]+/g, "");
+    return t.transactionType === 2 || s === "2" || s === "stockout";
+  });
   const stockOutUnits = stockOutItems.reduce((acc, curr) => acc + (Number(curr.Quantity) || Number(curr.quantity) || 0), 0);
 
-  const adjustmentItems = transactions.filter(
-    (t) => t.transactionType === 3 || String(t.transactionType).toLowerCase() === "adjustment"
-  );
+  const adjustmentItems = transactions.filter((t) => {
+    const s = String(t.transactionType || "").toLowerCase().replace(/[\s_-]+/g, "");
+    return t.transactionType === 3 || s === "3" || s === "adjustment";
+  });
 
   return (
     <div className="ledger-kpi-grid">

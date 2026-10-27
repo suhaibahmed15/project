@@ -10,7 +10,7 @@ export default function CreateAlertModal({
 }) {
   const [medicineId, setMedicineId] = useState("");
   const [batchId, setBatchId] = useState("");
-  const [alertType, setAlertType] = useState("1"); // 1: LowStock, 2: NearExpiry, 3: Expired, 4: StockOut
+  const [alertType, setAlertType] = useState("Low Stock");
   const [message, setMessage] = useState("");
   const [formError, setFormError] = useState("");
 
@@ -24,14 +24,15 @@ export default function CreateAlertModal({
     if (!medicineId) return;
     const selectedMed = medicines.find((m) => String(m.id) === String(medicineId));
     const medName = selectedMed?.name || "Medicine";
+    const s = String(alertType).toLowerCase().replace(/[\s_-]+/g, "");
 
-    if (alertType === "1") {
+    if (s === "1" || s === "lowstock") {
       setMessage(`Stock level for ${medName} is below the required reorder threshold.`);
-    } else if (alertType === "2") {
+    } else if (s === "2" || s.includes("near")) {
       setMessage(`Batch of ${medName} is approaching its expiration date within 30 days.`);
-    } else if (alertType === "3") {
+    } else if (s === "3" || s.includes("expired")) {
       setMessage(`Batch of ${medName} has expired and should be quarantined immediately.`);
-    } else if (alertType === "4") {
+    } else if (s === "4" || s === "stockout") {
       setMessage(`${medName} is completely out of stock.`);
     }
   }, [medicineId, alertType, medicines]);
@@ -53,7 +54,7 @@ export default function CreateAlertModal({
     onSubmit({
       medicineId: Number(medicineId),
       batchId: batchId ? Number(batchId) : null,
-      alertType: Number(alertType),
+      alertType: alertType,
       message: message.trim()
     });
   };
@@ -128,10 +129,10 @@ export default function CreateAlertModal({
                 value={alertType}
                 onChange={(e) => setAlertType(e.target.value)}
               >
-                <option value="1">⚠️ Low Stock (Below Reorder Level)</option>
-                <option value="2">⏳ Near Expiry (Within 30 Days)</option>
-                <option value="3">🚫 Expired (Past Expiry Date)</option>
-                <option value="4">📦 Stock Out (Zero Inventory)</option>
+                <option value="Low Stock">⚠️ Low Stock (Below Reorder Level)</option>
+                <option value="Near Expiry">⏳ Near Expiry (Within 30 Days)</option>
+                <option value="Expired">🚫 Expired (Past Expiry Date)</option>
+                <option value="Stock Out">📦 Stock Out (Zero Inventory)</option>
               </select>
             </div>
 

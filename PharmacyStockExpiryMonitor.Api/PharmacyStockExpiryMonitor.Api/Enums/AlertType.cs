@@ -1,5 +1,8 @@
-﻿namespace PharmacyStockExpiryMonitor.Api.Enums
+using System.Text.Json.Serialization;
+
+namespace PharmacyStockExpiryMonitor.Api.Enums
 {
+    [JsonConverter(typeof(AlertTypeJsonConverter))]
     public enum AlertType
     {
         LowStock = 1,

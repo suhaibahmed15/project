@@ -1,4 +1,4 @@
-﻿using PharmacyStockExpiryMonitor.Api.Entities;
+using PharmacyStockExpiryMonitor.Api.Entities;
 
 namespace PharmacyStockExpiryMonitor.Api.Repositories.Interfaces
 {
@@ -18,5 +18,13 @@ namespace PharmacyStockExpiryMonitor.Api.Repositories.Interfaces
         Task<Alert> AddAsync(Alert alert);
 
         Task UpdateAsync(Alert alert);
+
+        Task<List<Batch>> GetExpiringBatchesAsync(DateTime thresholdDate);
+
+        Task<List<Alert>> GetAlertsForBatchesAsync(IEnumerable<int> batchIds);
+
+        Task AddRangeAsync(IEnumerable<Alert> alerts);
+
+        Task UpdateRangeAsync(IEnumerable<Alert> alerts);
     }
 }

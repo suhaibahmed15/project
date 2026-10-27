@@ -89,15 +89,18 @@ export default function StockLedgerPage() {
   const counts = useMemo(() => {
     return {
       all: transactions.length,
-      stockIn: transactions.filter(
-        (t) => t.transactionType === 1 || String(t.transactionType).toLowerCase() === "stockin"
-      ).length,
-      stockOut: transactions.filter(
-        (t) => t.transactionType === 2 || String(t.transactionType).toLowerCase() === "stockout"
-      ).length,
-      adjustment: transactions.filter(
-        (t) => t.transactionType === 3 || String(t.transactionType).toLowerCase() === "adjustment"
-      ).length
+      stockIn: transactions.filter((t) => {
+        const s = String(t.transactionType || "").toLowerCase().replace(/[\s_-]+/g, "");
+        return t.transactionType === 1 || s === "1" || s === "stockin";
+      }).length,
+      stockOut: transactions.filter((t) => {
+        const s = String(t.transactionType || "").toLowerCase().replace(/[\s_-]+/g, "");
+        return t.transactionType === 2 || s === "2" || s === "stockout";
+      }).length,
+      adjustment: transactions.filter((t) => {
+        const s = String(t.transactionType || "").toLowerCase().replace(/[\s_-]+/g, "");
+        return t.transactionType === 3 || s === "3" || s === "adjustment";
+      }).length
     };
   }, [transactions]);
 
@@ -107,13 +110,14 @@ export default function StockLedgerPage() {
 
     // Filter by Transaction Type
     if (typeFilter !== "all") {
-      const targetType = Number(typeFilter);
+      const target = String(typeFilter).toLowerCase().replace(/[\s_-]+/g, "");
       list = list.filter((t) => {
         const num = Number(t.transactionType);
-        if (targetType === 1) return num === 1 || String(t.transactionType).toLowerCase() === "stockin";
-        if (targetType === 2) return num === 2 || String(t.transactionType).toLowerCase() === "stockout";
-        if (targetType === 3) return num === 3 || String(t.transactionType).toLowerCase() === "adjustment";
-        if (targetType === 4) return num === 4 || String(t.transactionType).toLowerCase() === "transfer";
+        const s = String(t.transactionType || "").toLowerCase().replace(/[\s_-]+/g, "");
+        if (target === "1" || target === "stockin") return num === 1 || s === "1" || s === "stockin";
+        if (target === "2" || target === "stockout") return num === 2 || s === "2" || s === "stockout";
+        if (target === "3" || target === "adjustment") return num === 3 || s === "3" || s === "adjustment";
+        if (target === "4" || target === "transfer") return num === 4 || s === "4" || s === "transfer";
         return true;
       });
     }
@@ -165,8 +169,8 @@ export default function StockLedgerPage() {
         valA = medA.toLowerCase();
         valB = medB.toLowerCase();
       } else if (sortBy === "type") {
-        valA = Number(a.transactionType) || 0;
-        valB = Number(b.transactionType) || 0;
+        valA = String(a.transactionType || "").toLowerCase();
+        valB = String(b.transactionType || "").toLowerCase();
       } else if (sortBy === "quantity") {
         valA = Number(a.quantity) || 0;
         valB = Number(b.quantity) || 0;

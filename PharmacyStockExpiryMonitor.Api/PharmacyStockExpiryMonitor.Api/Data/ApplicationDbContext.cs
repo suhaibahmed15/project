@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using PharmacyStockExpiryMonitor.Api.Entities;
+using PharmacyStockExpiryMonitor.Api.Enums;
 using System.Security.Claims;
 
 namespace PharmacyStockExpiryMonitor.Api.Data
@@ -272,6 +273,21 @@ namespace PharmacyStockExpiryMonitor.Api.Data
                 .HasIndex(x => x.CreatedAt);
 
             modelBuilder.Entity<StockTransaction>()
+                .Property(x => x.TransactionType)
+                .HasConversion(
+                    v => v == StockTransactionType.StockIn ? "Stock In" :
+                         v == StockTransactionType.StockOut ? "Stock Out" :
+                         v == StockTransactionType.Adjustment ? "Adjustment" :
+                         v == StockTransactionType.Transfer ? "Transfer" : "Stock In",
+                    v => v == "Stock In" || v == "StockIn" || v == "1" ? StockTransactionType.StockIn :
+                         v == "Stock Out" || v == "StockOut" || v == "2" ? StockTransactionType.StockOut :
+                         v == "Adjustment" || v == "3" ? StockTransactionType.Adjustment :
+                         v == "Transfer" || v == "4" ? StockTransactionType.Transfer :
+                         StockTransactionType.StockIn)
+                .HasMaxLength(50)
+                .IsRequired();
+
+            modelBuilder.Entity<StockTransaction>()
                 .HasIndex(x => x.TransactionType);
 
             modelBuilder.Entity<StockTransaction>()
@@ -304,6 +320,21 @@ namespace PharmacyStockExpiryMonitor.Api.Data
             // =========================
             // Alerts
             // =========================
+
+            modelBuilder.Entity<Alert>()
+                .Property(x => x.AlertType)
+                .HasConversion(
+                    v => v == AlertType.LowStock ? "Low Stock" :
+                         v == AlertType.NearExpiry ? "Near Expiry" :
+                         v == AlertType.Expired ? "Expired" :
+                         v == AlertType.StockOut ? "Stock Out" : "Low Stock",
+                    v => v == "Low Stock" || v == "LowStock" || v == "1" ? AlertType.LowStock :
+                         v == "Near Expiry" || v == "NearExpiry" || v == "2" ? AlertType.NearExpiry :
+                         v == "Expired" || v == "3" ? AlertType.Expired :
+                         v == "Stock Out" || v == "StockOut" || v == "4" ? AlertType.StockOut :
+                         AlertType.LowStock)
+                .HasMaxLength(50)
+                .IsRequired();
 
             modelBuilder.Entity<Alert>()
                 .HasIndex(x => x.AlertType);

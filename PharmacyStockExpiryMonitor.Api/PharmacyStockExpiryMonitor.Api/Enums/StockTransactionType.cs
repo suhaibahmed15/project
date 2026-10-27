@@ -1,5 +1,8 @@
-﻿namespace PharmacyStockExpiryMonitor.Api.Enums;
+using System.Text.Json.Serialization;
 
+namespace PharmacyStockExpiryMonitor.Api.Enums;
+
+[JsonConverter(typeof(StockTransactionTypeJsonConverter))]
 public enum StockTransactionType
 {
     StockIn = 1,

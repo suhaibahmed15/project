@@ -9,6 +9,8 @@ namespace PharmacyStockExpiryMonitor.Api.Services
     public class AlertService : IAlertService
     {
         private readonly IAlertRepository _repository;
+        private static DateTime _lastAutoCheckUtc = DateTime.MinValue;
+        private static readonly TimeSpan AutoCheckInterval = TimeSpan.FromMinutes(2);
 
         public AlertService(IAlertRepository repository)
         {
@@ -17,6 +19,18 @@ namespace PharmacyStockExpiryMonitor.Api.Services
 
         public async Task<List<AlertDto>> GetAllAsync()
         {
+            if (DateTime.UtcNow - _lastAutoCheckUtc >= AutoCheckInterval)
+            {
+                try
+                {
+                    await CheckAndGenerateExpiryAlertsAsync(force: false);
+                }
+                catch
+                {
+                    // Fail silently so reading alerts is not blocked if auto-generation hits an issue
+                }
+            }
+
             var alerts = await _repository.GetAllAsync();
 
             return alerts.Select(alert => new AlertDto
@@ -133,6 +147,109 @@ namespace PharmacyStockExpiryMonitor.Api.Services
             await _repository.UpdateAsync(alert);
 
             return true;
+        }
+
+        public async Task<int> CheckAndGenerateExpiryAlertsAsync(bool force = false)
+        {
+            _lastAutoCheckUtc = DateTime.UtcNow;
+
+            var today = DateTime.UtcNow.Date;
+            var nearExpiryThreshold = today.AddDays(30);
+
+            var batches = await _repository.GetExpiringBatchesAsync(nearExpiryThreshold);
+            if (batches == null || batches.Count == 0)
+                return 0;
+
+            var batchIds = batches.Select(b => b.Id).ToList();
+            var existingAlerts = await _repository.GetAlertsForBatchesAsync(batchIds);
+
+            var alertsToAdd = new List<Alert>();
+            var alertsToUpdate = new List<Alert>();
+
+            foreach (var batch in batches)
+            {
+                var isExpired = batch.ExpiryDate.Date < today;
+                var medicineName = batch.Medicine?.Name ?? $"Medicine #{batch.MedicineId}";
+
+                if (isExpired)
+                {
+                    // Transition any active NearExpiry alert for this batch to resolved
+                    var activeNearExpiryAlerts = existingAlerts
+                        .Where(a => a.BatchId == batch.Id && a.AlertType == AlertType.NearExpiry && !a.IsResolved)
+                        .ToList();
+
+                    foreach (var nearAlert in activeNearExpiryAlerts)
+                    {
+                        nearAlert.IsResolved = true;
+                        nearAlert.ResolvedAt = DateTime.UtcNow;
+                        if (!alertsToUpdate.Contains(nearAlert))
+                        {
+                            alertsToUpdate.Add(nearAlert);
+                        }
+                    }
+
+                    // Check if an Expired alert has already been created for this batch
+                    var alreadyHasExpiredAlert = existingAlerts
+                        .Any(a => a.BatchId == batch.Id && a.AlertType == AlertType.Expired);
+
+                    if (!alreadyHasExpiredAlert)
+                    {
+                        var newAlert = new Alert
+                        {
+                            MedicineId = batch.MedicineId,
+                            BatchId = batch.Id,
+                            AlertType = AlertType.Expired,
+                            Message = $"Batch {batch.BatchNumber} of {medicineName} expired on {batch.ExpiryDate:yyyy-MM-dd} with {batch.RemainingQuantity} units remaining in stock.",
+                            IsRead = false,
+                            IsResolved = false,
+                            CreatedAt = DateTime.UtcNow,
+                            CreatedBy = "System"
+                        };
+
+                        alertsToAdd.Add(newAlert);
+                        existingAlerts.Add(newAlert);
+                    }
+                }
+                else
+                {
+                    // Near Expiry (within 30 days)
+                    var alreadyHasNearExpiryAlert = existingAlerts
+                        .Any(a => a.BatchId == batch.Id && a.AlertType == AlertType.NearExpiry);
+
+                    if (!alreadyHasNearExpiryAlert)
+                    {
+                        var daysLeft = (batch.ExpiryDate.Date - today).Days;
+                        var dayText = daysLeft == 0 ? "today" : daysLeft == 1 ? "in 1 day" : $"in {daysLeft} days";
+
+                        var newAlert = new Alert
+                        {
+                            MedicineId = batch.MedicineId,
+                            BatchId = batch.Id,
+                            AlertType = AlertType.NearExpiry,
+                            Message = $"Batch {batch.BatchNumber} of {medicineName} is expiring {dayText} on {batch.ExpiryDate:yyyy-MM-dd} with {batch.RemainingQuantity} units remaining in stock.",
+                            IsRead = false,
+                            IsResolved = false,
+                            CreatedAt = DateTime.UtcNow,
+                            CreatedBy = "System"
+                        };
+
+                        alertsToAdd.Add(newAlert);
+                        existingAlerts.Add(newAlert);
+                    }
+                }
+            }
+
+            if (alertsToUpdate.Any())
+            {
+                await _repository.UpdateRangeAsync(alertsToUpdate);
+            }
+
+            if (alertsToAdd.Any())
+            {
+                await _repository.AddRangeAsync(alertsToAdd);
+            }
+
+            return alertsToAdd.Count;
         }
     }
 }

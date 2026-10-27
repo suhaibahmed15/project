@@ -96,7 +96,8 @@ export const alertsApi = {
   getById: (id) => client.get(`/Alert/${id}`),
   markAsRead: (id) => client.put(`/Alert/${id}/read`),
   resolve: (id) => client.put(`/Alert/${id}/resolve`),
-  create: (data) => client.post("/Alert", data)
+  create: (data) => client.post("/Alert", data),
+  checkExpiry: () => client.post("/Alert/check-expiry")
 };
 
 // Dashboard endpoints

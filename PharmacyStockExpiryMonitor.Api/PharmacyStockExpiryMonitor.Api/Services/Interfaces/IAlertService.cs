@@ -1,4 +1,4 @@
-﻿using PharmacyStockExpiryMonitor.Api.DTOs.Alert;
+using PharmacyStockExpiryMonitor.Api.DTOs.Alert;
 using PharmacyStockExpiryMonitor.Api.Enums;
 
 namespace PharmacyStockExpiryMonitor.Api.Services.Interfaces
@@ -18,5 +18,7 @@ namespace PharmacyStockExpiryMonitor.Api.Services.Interfaces
         Task<bool> MarkAsReadAsync(int id);
 
         Task<bool> ResolveAsync(int id);
+
+        Task<int> CheckAndGenerateExpiryAlertsAsync(bool force = false);
     }
 }

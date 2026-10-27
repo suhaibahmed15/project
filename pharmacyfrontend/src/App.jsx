@@ -40,9 +40,7 @@ export default function App() {
               <Route path="/purchases" element={<PurchasesPage />} />
               <Route path="/purchase" element={<PurchasesPage />} />
               <Route path="/categories" element={<CategoriesPage />} />
-              <Route path="/category" element={<CategoriesPage />} />
               <Route path="/suppliers" element={<SuppliersPage />} />
-              <Route path="/supplier" element={<SuppliersPage />} />
               <Route path="/intelligence" element={<IntelligencePage />} />
 
               {/* Admin Only User Management Routes */}
@@ -65,3 +63,32 @@ export default function App() {
     </AuthProvider>
   );
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

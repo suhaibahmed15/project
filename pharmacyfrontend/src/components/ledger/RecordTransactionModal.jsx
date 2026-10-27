@@ -13,17 +13,20 @@ export default function RecordTransactionModal({
 }) {
   const [selectedMedicineId, setSelectedMedicineId] = useState("");
   const [selectedBatchId, setSelectedBatchId] = useState("");
-  const [transactionType, setTransactionType] = useState("1"); // 1: StockIn, 2: StockOut, 3: Adjustment
+  const [transactionType, setTransactionType] = useState("Stock In");
   const [quantity, setQuantity] = useState("");
   const [reason, setReason] = useState("");
   const [isAdminOverride, setIsAdminOverride] = useState(false);
   const [formError, setFormError] = useState("");
 
+  const isAdjustment = String(transactionType).toLowerCase().replace(/[\s_-]+/g, "") === "adjustment" || transactionType === "3";
+  const isStockOut = String(transactionType).toLowerCase().replace(/[\s_-]+/g, "") === "stockout" || transactionType === "2";
+
   useEffect(() => {
     if (isOpen) {
       setSelectedMedicineId("");
       setSelectedBatchId("");
-      setTransactionType("1");
+      setTransactionType("Stock In");
       setQuantity("");
       setReason("");
       setIsAdminOverride(isAdmin);
@@ -53,13 +56,12 @@ export default function RecordTransactionModal({
       return;
     }
 
-    const typeNum = parseInt(transactionType, 10);
-    if (typeNum === 3 && !isAdminOverride) {
+    if (isAdjustment && !isAdminOverride) {
       setFormError("Adjustments require an Admin Override.");
       return;
     }
 
-    if (typeNum === 2 && selectedBatch && selectedBatch.remainingQuantity < qty) {
+    if (isStockOut && selectedBatch && selectedBatch.remainingQuantity < qty) {
       setFormError(
         `Insufficient batch stock. Available: ${selectedBatch.remainingQuantity}, Requested: ${qty}`
       );
@@ -68,7 +70,7 @@ export default function RecordTransactionModal({
 
     onSubmit({
       batchId: parseInt(selectedBatchId, 10),
-      transactionType: typeNum,
+      transactionType: transactionType,
       quantity: qty,
       reason: reason.trim() || undefined,
       isAdminOverride: Boolean(isAdminOverride)
@@ -179,16 +181,16 @@ export default function RecordTransactionModal({
                 onChange={(e) => setTransactionType(e.target.value)}
                 required
               >
-                <option value="1">Stock In (+ Receive Inventory)</option>
-                <option value="2">Stock Out (- Dispense / Consume)</option>
-                <option value="3">Adjustment (Set / Correct Balance)</option>
+                <option value="Stock In">Stock In (+ Receive Inventory)</option>
+                <option value="Stock Out">Stock Out (- Dispense / Consume)</option>
+                <option value="Adjustment">Adjustment (Set / Correct Balance)</option>
               </select>
             </div>
 
             {/* Quantity */}
             <div className="form-group" style={{ marginBottom: "12px" }}>
               <label className="form-label" htmlFor="tx-qty-input">
-                {transactionType === "3" ? "New Adjusted Total Quantity *" : "Quantity to Move *"}
+                {isAdjustment ? "New Adjusted Total Quantity *" : "Quantity to Move *"}
               </label>
               <input
                 id="tx-qty-input"
@@ -220,7 +222,7 @@ export default function RecordTransactionModal({
             </div>
 
             {/* Admin Override */}
-            {(transactionType === "3" || isAdmin) && (
+            {(isAdjustment || isAdmin) && (
               <div className="modal-admin-override-box">
                 <input
                   id="tx-override-cb"

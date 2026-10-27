@@ -11,6 +11,8 @@ using PharmacyStockExpiryMonitor.Api.Services;
 using PharmacyStockExpiryMonitor.Api.Services.Interfaces;
 using PharmacyStockExpiryMonitor.Api.Authorization;
 using PharmacyStockExpiryMonitor.Api.Middleware;
+using PharmacyStockExpiryMonitor.Api.BackgroundServices;
+using PharmacyStockExpiryMonitor.Api.Enums;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -63,7 +65,12 @@ builder.Services.AddAuthentication(options =>
 
 builder.Services.AddAuthorization();
 
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.Converters.Add(new StockTransactionTypeJsonConverter());
+        options.JsonSerializerOptions.Converters.Add(new AlertTypeJsonConverter());
+    });
 
 builder.Services.AddEndpointsApiExplorer();
 
@@ -147,6 +154,10 @@ builder.Services.AddScoped<IUserService, UserService>();
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<IAuditLogService, AuditLogService>();
+
+// Background Services
+builder.Services.AddHostedService<ExpiryAlertBackgroundService>();
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())

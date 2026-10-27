@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PharmacyStockExpiryMonitor.Api.DTOs.Alert;
 using PharmacyStockExpiryMonitor.Api.Services.Interfaces;
@@ -87,6 +87,22 @@ namespace PharmacyStockExpiryMonitor.Api.Controllers
                 nameof(GetById),
                 new { id = alert.Id },
                 alert);
+        }
+
+        // POST: api/Alert/check-expiry
+        // Evaluates all active batches and automatically generates alerts for near-expiry and expired batches.
+        [HttpPost("check-expiry")]
+        public async Task<IActionResult> CheckExpiry()
+        {
+            var count = await _alertService.CheckAndGenerateExpiryAlertsAsync(force: true);
+
+            return Ok(new
+            {
+                message = count > 0
+                    ? $"Expiry scan completed. {count} new alert(s) generated."
+                    : "Expiry scan completed. All alerts are up to date.",
+                newAlertsCount = count
+            });
         }
     }
 }
