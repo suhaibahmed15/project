@@ -9,6 +9,7 @@ import PurchaseStatsCards from "../components/purchases/PurchaseStatsCards";
 import CreatePurchaseModal from "../components/purchases/CreatePurchaseModal";
 import PurchaseDetailsModal from "../components/purchases/PurchaseDetailsModal";
 import ConfirmModal from "../components/common/ConfirmModal";
+import Pagination from "../components/common/Pagination";
 
 export default function PurchasesPage() {
   const { isAdmin, isStoreManager, isPharmacist, roleId } = useAuth();
@@ -41,7 +42,7 @@ export default function PurchasesPage() {
 
   // Pagination states
   const [currentPage, setCurrentPage] = useState(1);
-  const pageSize = 10;
+  const [pageSize, setPageSize] = useState(10);
 
   // Modals
   const [isCreateOpen, setIsCreateOpen] = useState(false);
@@ -428,43 +429,19 @@ export default function PurchasesPage() {
 
         {/* Pagination Controls */}
         {!loading && filteredPurchases.length > 0 && (
-          <div className="decent-pagination">
-            <span className="decent-pagination-info">
-              Showing {Math.min((currentPage - 1) * pageSize + 1, totalItems)} to{" "}
-              {Math.min(currentPage * pageSize, totalItems)} of {totalItems} purchase orders
-            </span>
-
-            <div className="decent-pagination-btns">
-              <button
-                type="button"
-                className="decent-page-btn"
-                onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
-                disabled={currentPage === 1}
-              >
-                Previous
-              </button>
-
-              {Array.from({ length: totalPages }, (_, i) => i + 1).map((pg) => (
-                <button
-                  key={pg}
-                  type="button"
-                  className={`decent-page-btn ${currentPage === pg ? "active" : ""}`}
-                  onClick={() => setCurrentPage(pg)}
-                >
-                  {pg}
-                </button>
-              ))}
-
-              <button
-                type="button"
-                className="decent-page-btn"
-                onClick={() => setCurrentPage((p) => Math.min(p + 1, totalPages))}
-                disabled={currentPage === totalPages}
-              >
-                Next
-              </button>
-            </div>
-          </div>
+          <Pagination
+            page={currentPage}
+            currentPage={currentPage}
+            totalPages={totalPages}
+            pageSize={pageSize}
+            totalCount={totalItems}
+            onPageChange={setCurrentPage}
+            onPageSizeChange={(newSize) => {
+              setPageSize(newSize);
+              setCurrentPage(1);
+            }}
+            loading={loading}
+          />
         )}
       </div>
 

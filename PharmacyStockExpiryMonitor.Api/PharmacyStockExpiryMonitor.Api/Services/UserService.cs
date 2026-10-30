@@ -1,10 +1,8 @@
-
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using PharmacyStockExpiryMonitor.Api.Data;
 using PharmacyStockExpiryMonitor.Api.DTOs.User;
 using PharmacyStockExpiryMonitor.Api.Entities;
+using PharmacyStockExpiryMonitor.Api.Repositories.Interfaces;
 using PharmacyStockExpiryMonitor.Api.Services.Interfaces;
 using System.Security.Claims;
 
@@ -12,22 +10,19 @@ namespace PharmacyStockExpiryMonitor.Api.Services
 {
     public class UserService : IUserService
     {
-        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IUserRepository _userRepository;
         private readonly RoleManager<IdentityRole<int>> _roleManager;
-        private readonly ApplicationDbContext _context;
         private readonly IAuditLogService _auditLogService;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
         public UserService(
-            UserManager<ApplicationUser> userManager,
+            IUserRepository userRepository,
             RoleManager<IdentityRole<int>> roleManager,
-            ApplicationDbContext context,
             IAuditLogService auditLogService,
             IHttpContextAccessor httpContextAccessor)
         {
-            _userManager = userManager;
+            _userRepository = userRepository;
             _roleManager = roleManager;
-            _context = context;
             _auditLogService = auditLogService;
             _httpContextAccessor = httpContextAccessor;
         }
@@ -35,10 +30,7 @@ namespace PharmacyStockExpiryMonitor.Api.Services
         // Get all users that have not been deleted.
         public async Task<List<UserDto>> GetAllAsync()
         {
-            var users = _userManager.Users
-                .Where(x => !x.IsDeleted)
-                .OrderBy(x => x.FullName)
-                .ToList();
+            var users = await _userRepository.GetAllAsync();
 
             var result = new List<UserDto>();
 
@@ -64,9 +56,7 @@ namespace PharmacyStockExpiryMonitor.Api.Services
         // Get a single user by ID.
         public async Task<UserDto?> GetByIdAsync(int id)
         {
-            var user = await _userManager.FindByIdAsync(
-                id.ToString()
-            );
+            var user = await _userRepository.GetByIdAsync(id);
 
             if (user == null || user.IsDeleted)
             {
@@ -114,7 +104,7 @@ namespace PharmacyStockExpiryMonitor.Api.Services
 
             // Check whether the email already exists.
             var existingUser =
-                await _userManager.FindByEmailAsync(email);
+                await _userRepository.GetByEmailAsync(email);
 
             if (existingUser != null)
             {
@@ -139,7 +129,7 @@ namespace PharmacyStockExpiryMonitor.Api.Services
                 CreatedAt = DateTime.UtcNow
             };
 
-            var createResult = await _userManager.CreateAsync(
+            var createResult = await _userRepository.CreateAsync(
                 user,
                 dto.Password
             );
@@ -157,7 +147,7 @@ namespace PharmacyStockExpiryMonitor.Api.Services
             }
 
             // Identity assigns membership using the role name.
-            var roleResult = await _userManager.AddToRoleAsync(
+            var roleResult = await _userRepository.AddToRoleAsync(
                 user,
                 role.Name
             );
@@ -165,7 +155,7 @@ namespace PharmacyStockExpiryMonitor.Api.Services
             if (!roleResult.Succeeded)
             {
                 // Remove the newly created user if assignment fails.
-                await _userManager.DeleteAsync(user);
+                await _userRepository.DeleteIdentityUserAsync(user);
 
                 var errors = string.Join(
                     ", ",
@@ -207,9 +197,7 @@ namespace PharmacyStockExpiryMonitor.Api.Services
             int userId,
             AssignRoleDto dto)
         {
-            var user = await _userManager.FindByIdAsync(
-                userId.ToString()
-            );
+            var user = await _userRepository.GetByIdAsync(userId);
 
             if (user == null || user.IsDeleted)
             {
@@ -243,13 +231,13 @@ namespace PharmacyStockExpiryMonitor.Api.Services
 
             // Get the user's current Identity roles.
             var existingRoles =
-                await _userManager.GetRolesAsync(user);
+                await _userRepository.GetRolesAsync(user);
 
             // Remove existing role memberships.
             if (existingRoles.Any())
             {
                 var removeResult =
-                    await _userManager.RemoveFromRolesAsync(
+                    await _userRepository.RemoveFromRolesAsync(
                         user,
                         existingRoles
                     );
@@ -268,7 +256,7 @@ namespace PharmacyStockExpiryMonitor.Api.Services
             }
 
             // Assign the new Identity role.
-            var roleResult = await _userManager.AddToRoleAsync(
+            var roleResult = await _userRepository.AddToRoleAsync(
                 user,
                 role.Name
             );
@@ -292,7 +280,7 @@ namespace PharmacyStockExpiryMonitor.Api.Services
             user.UpdatedAt = DateTime.UtcNow;
             user.UpdatedBy = _httpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "System";
 
-            await _context.SaveChangesAsync();
+            await _userRepository.UpdateAsync(user);
 
             await _auditLogService.LogJsonAsync(
                 "ASSIGN_ROLE",
@@ -307,19 +295,16 @@ namespace PharmacyStockExpiryMonitor.Api.Services
         // Soft-delete a user without physically removing the record.
         public async Task<bool> DeleteAsync(int id)
         {
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
+            var user = await _userRepository.GetByIdAsync(id);
 
             if (user == null || user.IsDeleted)
             {
                 return false;
             }
 
-            user.IsDeleted = true;
-            user.IsActive = false;
-            user.UpdatedAt = DateTime.UtcNow;
             user.UpdatedBy = _httpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "System";
 
-            await _context.SaveChangesAsync();
+            await _userRepository.DeleteAsync(user);
 
             await _auditLogService.LogJsonAsync(
                 "DELETE",
