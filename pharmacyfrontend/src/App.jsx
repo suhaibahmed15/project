@@ -1,23 +1,27 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
-import ProtectedRoute from "./components/ProtectedRoute";
-import AdminRoute from "./components/AdminRoute";
-// import ManagerOrAdminRoute from "./components/ManagerOrAdminRoute";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+
 import Layout from "./components/Layout";
-import LoginPage from "./pages/LoginPage";
-import DashboardPage from "./pages/DashboardPage";
-import MedicinesPage from "./pages/MedicinesPage";
-import BatchesPage from "./pages/BatchesPage";
-import AlertsPage from "./pages/AlertsPage";
-import IntelligencePage from "./pages/IntelligencePage";
-import UnauthorizedPage from "./pages/UnauthorizedPage";
-import NotFoundPage from "./pages/NotFoundPage";
+import AdminRoute from "./components/AdminRoute";
+import ProtectedRoute from "./components/ProtectedRoute";
+
 import ErrorPage from "./pages/ErrorPage";
 import UsersPage from "./pages/UsersPage";
-import StockLedgerPage from "./pages/StockLedgerPage";
+import LoginPage from "./pages/LoginPage";
+
+import AlertsPage from "./pages/AlertsPage";
+import BatchesPage from "./pages/BatchesPage";
+import NotFoundPage from "./pages/NotFoundPage";
+
+import MedicinesPage from "./pages/MedicinesPage";
+import DashboardPage from "./pages/DashboardPage";
 import PurchasesPage from "./pages/PurchasesPage";
-import CategoriesPage from "./pages/CategoriesPage";
 import SuppliersPage from "./pages/SuppliersPage";
+
+import CategoriesPage from "./pages/CategoriesPage";
+import StockLedgerPage from "./pages/StockLedgerPage";
+import IntelligencePage from "./pages/IntelligencePage";
+import UnauthorizedPage from "./pages/UnauthorizedPage";
 
 export default function App() {
   return (
@@ -31,26 +35,28 @@ export default function App() {
           <Route element={<ProtectedRoute />}>
             <Route element={<Layout />}>
               <Route path="/" element={<DashboardPage />} />
-              <Route path="/medicines" element={<MedicinesPage />} />
-              <Route path="/batches" element={<BatchesPage />} />
-              <Route path="/batch" element={<BatchesPage />} />
               <Route path="/alerts" element={<AlertsPage />} />
-              <Route path="/transactions" element={<StockLedgerPage />} />
-              <Route path="/ledger" element={<StockLedgerPage />} />
-              <Route path="/purchases" element={<PurchasesPage />} />
+              <Route path="/batch" element={<BatchesPage />} />
+              <Route path="/batches" element={<BatchesPage />} />
+              
               <Route path="/purchase" element={<PurchasesPage />} />
-              <Route path="/categories" element={<CategoriesPage />} />
+              <Route path="/ledger" element={<StockLedgerPage />} />
               <Route path="/suppliers" element={<SuppliersPage />} />
+              <Route path="/medicines" element={<MedicinesPage />} />
+              
+              <Route path="/purchases" element={<PurchasesPage />} />
+              <Route path="/categories" element={<CategoriesPage />} />
+              <Route path="/transactions" element={<StockLedgerPage />} />
               <Route path="/intelligence" element={<IntelligencePage />} />
 
               {/* Admin Only User Management Routes */}
               <Route element={<AdminRoute />}>
-                <Route path="/users" element={<UsersPage />} />
                 <Route path="/user" element={<UsersPage />} />
+                <Route path="/users" element={<UsersPage />} />
               </Route>
 
-              <Route path="/unauthorized" element={<UnauthorizedPage />} />
               <Route path="/error" element={<ErrorPage />} />
+              <Route path="/unauthorized" element={<UnauthorizedPage />} />
             </Route>
           </Route>
 
@@ -63,32 +69,4 @@ export default function App() {
     </AuthProvider>
   );
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

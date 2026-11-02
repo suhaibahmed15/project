@@ -2,8 +2,8 @@
 
 export const ROLES = {
   ADMIN: "Admin",
-  STORE_MANAGER: "StoreManager",
-  PHARMACIST: "Pharmacist"
+  PHARMACIST: "Pharmacist",
+  STORE_MANAGER: "StoreManager"
 };
 
 export const ALERT_TYPES = {
@@ -24,14 +24,14 @@ export const TRANSACTION_TYPES = {
   STOCK_IN: 1,
   STOCK_OUT: 2,
   ADJUSTMENT: 3,
-  TRANSFER: 4
+
 };
 
 export const TRANSACTION_TYPE_LABELS = {
   1: "Stock In",
   2: "Stock Out / Dispensed",
   3: "Adjustment",
-  4: "Transfer"
+
 };
 
 export const DEFAULT_PAGE_SIZE = 10;

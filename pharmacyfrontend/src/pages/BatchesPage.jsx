@@ -14,8 +14,8 @@ export default function BatchesPage() {
   // - Deletion: Admin only
   // - Create & Edit: Admin, Store Manager, and Pharmacist
   const canDelete = Boolean(isAdmin || roleId === 1 || roleId === "1");
-  const canEdit = Boolean(isAdmin || isStoreManager || isPharmacist || roleId === 1 || roleId === 2 || roleId === 3 || roleId === "1" || roleId === "2" || roleId === "3");
-  const canCreate = Boolean(isAdmin || isStoreManager || isPharmacist || roleId === 1 || roleId === 2 || roleId === 3 || roleId === "1" || roleId === "2" || roleId === "3");
+  const canEdit = Boolean(isAdmin || isStoreManager || isPharmacist || [1, 2, 3].includes(Number(roleId)));
+  const canCreate = canEdit;
 
   // Data states
   const [batches, setBatches] = useState([]);

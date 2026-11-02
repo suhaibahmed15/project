@@ -12,7 +12,7 @@ import ConfirmModal from "../components/common/ConfirmModal";
 import Pagination from "../components/common/Pagination";
 
 export default function PurchasesPage() {
-  const { isAdmin, isStoreManager, isPharmacist, roleId } = useAuth();
+  const { isAdmin, isStoreManager, roleId } = useAuth();
 
   // Role permissions:
   // - Only Admin can delete purchases

@@ -98,47 +98,6 @@ export default function LoginPage() {
 
             {infoMessage && <div className="login-info-alert">{infoMessage}</div>}
 
-            {/* Active session info if user is already authenticated */}
-            {isAuthenticated && (
-              <div className="login-session-card">
-                <p style={{ margin: "0 0 10px 0", fontSize: "13px", color: "#475569" }}>
-                  Active session as <strong>{currentRole}</strong> ({user?.email || "Logged in"})
-                </p>
-                <div style={{ display: "flex", gap: "8px", justifyContent: "center" }}>
-                  <button
-                    type="button"
-                    onClick={handleLogout}
-                    style={{
-                      padding: "6px 14px",
-                      fontSize: "12px",
-                      fontWeight: "600",
-                      color: "#ffffff",
-                      backgroundColor: "#dc2626",
-                      border: "none",
-                      borderRadius: "6px",
-                      cursor: "pointer"
-                    }}
-                  >
-                    Logout
-                  </button>
-                  <Link
-                    to="/"
-                    style={{
-                      padding: "6px 14px",
-                      fontSize: "12px",
-                      fontWeight: "600",
-                      color: "#152614",
-                      backgroundColor: "#F1F5F9",
-                      border: "1px solid #E2E8F0",
-                      borderRadius: "6px",
-                      textDecoration: "none"
-                    }}
-                  >
-                    Go to Dashboard
-                  </Link>
-                </div>
-              </div>
-            )}
 
             {/* Login Form */}
             <form onSubmit={handleSubmit} className="login-form">

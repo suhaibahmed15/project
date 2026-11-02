@@ -68,7 +68,6 @@ export default function Layout() {
       <div className="main-area">
         <Topbar
           user={user}
-          role={role}
           onLogout={handleLogout}
           onToggleSidebar={() => setSidebarOpen(!sidebarOpen)}
           sidebarOpen={sidebarOpen}

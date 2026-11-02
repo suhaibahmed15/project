@@ -22,8 +22,8 @@ public class StockTransactionTypeJsonConverter : JsonConverter<StockTransactionT
             {
                 "stockin" or "1" => StockTransactionType.StockIn,
                 "stockout" or "2" => StockTransactionType.StockOut,
-                "adjustment" or "3" => StockTransactionType.Adjustment,
-                "transfer" or "4" => StockTransactionType.Transfer,
+                "adjustment" or "3" => StockTransactionType.Adjustment
+                
                 _ => Enum.TryParse<StockTransactionType>(str, true, out var result) ? result : StockTransactionType.StockIn
             };
         }
@@ -37,8 +37,7 @@ public class StockTransactionTypeJsonConverter : JsonConverter<StockTransactionT
         {
             StockTransactionType.StockIn => "Stock In",
             StockTransactionType.StockOut => "Stock Out",
-            StockTransactionType.Adjustment => "Adjustment",
-            StockTransactionType.Transfer => "Transfer",
+            StockTransactionType.Adjustment => "Adjustment"
             _ => value.ToString()
         };
         writer.WriteStringValue(str);

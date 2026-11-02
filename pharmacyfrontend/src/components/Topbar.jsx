@@ -5,7 +5,6 @@ import "../styles/layout.css";
 
 export default function Topbar({
   user,
-  role,
   onLogout,
   onToggleSidebar,
   sidebarOpen
