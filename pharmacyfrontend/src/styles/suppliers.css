@@ -295,40 +295,25 @@
 
 /* Status Badges */
 .supplier-status-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  padding: 2px 7px;
-  border-radius: 4px;
-  font-size: 11.5px;
-  font-weight: 600;
+  display: inline-block;
+  padding: 0 !important;
+  font-size: 13px;
+  font-weight: 500;
+  background: none !important;
+  border: none !important;
+  color: #000000 !important;
   white-space: nowrap;
 }
 
-.supplier-status-badge.active {
-  background-color: #f0fdf4;
-  color: #15803d;
-  border: 1px solid #bbf7d0;
-}
-
+.supplier-status-badge.active,
 .supplier-status-badge.inactive {
-  background-color: #f8fafc;
-  color: #64748b;
-  border: 1px solid #e2e8f0;
+  background: none !important;
+  color: #000000 !important;
+  border: none !important;
 }
 
 .supplier-status-dot {
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-}
-
-.supplier-status-dot.active {
-  background-color: #16a34a;
-}
-
-.supplier-status-dot.inactive {
-  background-color: #94a3b8;
+  display: none !important;
 }
 
 /* ==========================================================================

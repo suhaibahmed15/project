@@ -328,36 +328,23 @@
 .expiry-pill {
   display: inline-flex;
   align-items: center;
-  gap: 5px;
-  padding: 3px 9px;
-  border-radius: 4px;
-  font-size: 12px;
-  font-weight: 600;
+  gap: 4px;
+  padding: 0 !important;
+  font-size: 12.5px;
+  font-weight: 500;
+  background: none !important;
+  border: none !important;
+  color: #000000 !important;
   white-space: nowrap;
 }
 
-.expiry-pill.expired {
-  background-color: #fee2e2;
-  color: #991b1b;
-  border: 1px solid #fecaca;
-}
-
-.expiry-pill.near {
-  background-color: #fef3c7;
-  color: #92400e;
-  border: 1px solid #fde68a;
-}
-
-.expiry-pill.warning {
-  background-color: #ffedd5;
-  color: #9a3412;
-  border: 1px solid #fed7aa;
-}
-
+.expiry-pill.expired,
+.expiry-pill.near,
+.expiry-pill.warning,
 .expiry-pill.safe {
-  background-color: #dcfce7;
-  color: #166534;
-  border: 1px solid #bbf7d0;
+  background: none !important;
+  color: #000000 !important;
+  border: none !important;
 }
 
 /* Stock Remaining Bar */

@@ -150,13 +150,8 @@ export default function IntelligenceTable({
                     <td>
                       <span
                         style={{
-                          fontWeight: "700",
-                          color:
-                            pred.estimatedDaysRemaining <= 3
-                              ? "#dc2626"
-                              : pred.estimatedDaysRemaining <= 7
-                              ? "#d97706"
-                              : "#16a34a"
+                          fontWeight: "600",
+                          color: "#000000"
                         }}
                       >
                         {pred.estimatedDaysRemaining > 0 ? `${pred.estimatedDaysRemaining}d` : "Depleted"}

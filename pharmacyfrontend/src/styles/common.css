@@ -379,3 +379,33 @@
   font-size: 13px;
   margin-bottom: 14px;
 }
+
+/* ==========================================================================
+   Global Plain Text Overrides for Table Badges & Status Pills
+   ========================================================================== */
+table .badge,
+table .badge-secondary,
+.decent-stock,
+.decent-status,
+.badge-movement,
+.purchase-items-count,
+.prediction-type-badge,
+.expiry-pill,
+.category-status-badge,
+.category-med-count,
+.supplier-status-badge,
+.role-pill,
+.system-role-tag {
+  background: none !important;
+  background-color: transparent !important;
+  color: #000000 !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
+}
+
+.category-status-dot,
+.supplier-status-dot {
+  display: none !important;
+}

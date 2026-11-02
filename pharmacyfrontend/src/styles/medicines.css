@@ -148,45 +148,52 @@
 
 .decent-stock {
   display: inline-block;
-  padding: 2px 8px;
-  font-size: 12px;
-  font-weight: 600;
-  border-radius: 4px;
+  padding: 0 !important;
+  font-size: 13px;
+  font-weight: 500;
+  background: none !important;
+  color: #000000 !important;
+  border: none !important;
 }
 
 .decent-stock.ok {
-  background-color: #dcfce7;
-  color: #166534;
+  background: none !important;
+  color: #000000 !important;
+  border: none !important;
 }
 
 .decent-stock.low {
-  background-color: #fef3c7;
-  color: #92400e;
+  background: none !important;
+  color: #000000 !important;
+  border: none !important;
 }
 
 .decent-stock.out {
-  background-color: #fee2e2;
-  color: #991b1b;
+  background: none !important;
+  color: #000000 !important;
+  border: none !important;
 }
 
 .decent-status {
   display: inline-block;
-  padding: 2px 8px;
-  font-size: 12px;
+  padding: 0 !important;
+  font-size: 13px;
   font-weight: 500;
-  border-radius: 4px;
+  background: none !important;
+  color: #000000 !important;
+  border: none !important;
 }
 
 .decent-status.active {
-  background-color: #f0fdf4;
-  color: #15803d;
-  border: 1px solid #dcfce7;
+  background: none !important;
+  color: #000000 !important;
+  border: none !important;
 }
 
 .decent-status.inactive {
-  background-color: #f8fafc;
-  color: #64748b;
-  border: 1px solid #e2e8f0;
+  background: none !important;
+  color: #000000 !important;
+  border: none !important;
 }
 
 .decent-loading-cell,

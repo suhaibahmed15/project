@@ -275,39 +275,39 @@
 }
 
 .prediction-type-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  padding: 3px 10px;
-  border-radius: 4px;
-  font-size: 11.5px;
-  font-weight: 600;
+  display: inline-block;
+  padding: 0 !important;
+  font-size: 13px;
+  font-weight: 500;
+  background: none !important;
+  color: #000000 !important;
+  border: none !important;
 }
 
 .badge-stock-out {
-  background-color: #fee2e2;
-  color: #991b1b;
-  border: 1px solid #fecaca;
+  background: none !important;
+  color: #000000 !important;
+  border: none !important;
 }
 .badge-high-risk {
-  background-color: #fee2e2;
-  color: #b91c1c;
-  border: 1px solid #fecaca;
+  background: none !important;
+  color: #000000 !important;
+  border: none !important;
 }
 .badge-medium-risk {
-  background-color: #fef3c7;
-  color: #92400e;
-  border: 1px solid #fde68a;
+  background: none !important;
+  color: #000000 !important;
+  border: none !important;
 }
 .badge-low-risk {
-  background-color: #dcfce7;
-  color: #166534;
-  border: 1px solid #bbf7d0;
+  background: none !important;
+  color: #000000 !important;
+  border: none !important;
 }
 .badge-insufficient {
-  background-color: #f1f5f9;
-  color: #475569;
-  border: 1px solid #cbd5e1;
+  background: none !important;
+  color: #000000 !important;
+  border: none !important;
 }
 
 .prediction-stat-grid {

@@ -417,39 +417,24 @@
 
 /* Category Status Badge */
 .category-status-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 3px 9px;
-  font-size: 12px;
+  display: inline-block;
+  padding: 0 !important;
+  font-size: 13px;
   font-weight: 500;
-  border-radius: 9999px;
+  background: none !important;
+  border: none !important;
+  color: #000000 !important;
 }
 
-.category-status-badge.active {
-  background-color: #ecfdf5;
-  color: #15803d;
-  border: 1px solid #bbf7d0;
-}
-
+.category-status-badge.active,
 .category-status-badge.inactive {
-  background-color: #f8fafc;
-  color: #64748b;
-  border: 1px solid #e2e8f0;
+  background: none !important;
+  color: #000000 !important;
+  border: none !important;
 }
 
 .category-status-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-}
-
-.category-status-dot.active {
-  background-color: #22c55e;
-}
-
-.category-status-dot.inactive {
-  background-color: #94a3b8;
+  display: none !important;
 }
 
 /* Medicine Count Badge */
@@ -457,13 +442,12 @@
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  padding: 2.5px 8px;
-  border-radius: 6px;
-  font-size: 12px;
-  font-weight: 600;
-  background-color: #f1f5f9;
-  color: #334155;
-  border: 1px solid #e2e8f0;
+  padding: 0 !important;
+  font-size: 13px;
+  font-weight: 500;
+  background: none !important;
+  color: #000000 !important;
+  border: none !important;
 }
 
 /* Category Actions */

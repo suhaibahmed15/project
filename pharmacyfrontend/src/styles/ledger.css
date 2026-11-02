@@ -288,39 +288,38 @@
 
 /* Movement Type Badges */
 .badge-movement {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  padding: 3px 9px;
-  font-size: 11.5px;
-  font-weight: 700;
-  border-radius: 4px;
-  letter-spacing: 0.2px;
+  display: inline-block;
+  padding: 0 !important;
+  font-size: 13px;
+  font-weight: 500;
+  background: none !important;
+  border: none !important;
+  color: #000000 !important;
   white-space: nowrap;
 }
 
 .badge-stock-in {
-  background-color: #dcfce7;
-  color: #166534;
-  border: 1px solid #bbf7d0;
+  background: none !important;
+  color: #000000 !important;
+  border: none !important;
 }
 
 .badge-stock-out {
-  background-color: #fee2e2;
-  color: #991b1b;
-  border: 1px solid #fecaca;
+  background: none !important;
+  color: #000000 !important;
+  border: none !important;
 }
 
 .badge-adjustment {
-  background-color: #fef3c7;
-  color: #92400e;
-  border: 1px solid #fde68a;
+  background: none !important;
+  color: #000000 !important;
+  border: none !important;
 }
 
 .badge-transfer {
-  background-color: #e0e7ff;
-  color: #3730a3;
-  border: 1px solid #c7d2fe;
+  background: none !important;
+  color: #000000 !important;
+  border: none !important;
 }
 
 /* Balance Shift Pill */
@@ -328,43 +327,43 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  font-size: 12px;
-  background-color: #f8fafc;
-  border: 1px solid #e2e8f0;
-  padding: 3px 8px;
-  border-radius: 4px;
+  font-size: 12.5px;
+  background: none !important;
+  border: none !important;
+  padding: 0 !important;
   white-space: nowrap;
+  color: #000000 !important;
 }
 
 .balance-old {
-  color: #64748b;
+  color: #000000 !important;
   font-weight: 500;
 }
 
 .balance-arrow {
-  color: #94a3b8;
-  font-weight: 700;
+  color: #000000 !important;
+  font-weight: 500;
 }
 
 .balance-new {
-  font-weight: 700;
-  color: #0f172a;
+  font-weight: 600;
+  color: #000000 !important;
 }
 
 /* Quantity Delta */
 .qty-delta-positive {
-  color: #16a34a;
-  font-weight: 700;
+  color: #000000 !important;
+  font-weight: 600;
 }
 
 .qty-delta-negative {
-  color: #dc2626;
-  font-weight: 700;
+  color: #000000 !important;
+  font-weight: 600;
 }
 
 .qty-delta-neutral {
-  color: #152614;
-  font-weight: 700;
+  color: #000000 !important;
+  font-weight: 600;
 }
 
 /* Empty State */
